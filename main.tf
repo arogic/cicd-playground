@@ -2,10 +2,10 @@ provider "azurerm" {
   features {}
 }
 
-terraform {
-  backend "azurerm" {
-  }
-}
+# terraform {
+#   backend "azurerm" {
+#   }
+# }
 
 module "rg" {
   source   = "./modules/arm_resource_group"
