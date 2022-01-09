@@ -81,26 +81,26 @@ jobs:
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    - name: Azure Login
-      uses: Azure/login@v1
-      with:
-        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        # creds: ${{ secrets.AZ_CLIENT_SECRET }}
-        # ClientId of the Azure Service principal created.
-        # client-id: ${{ secrets.AZ_CLIENT_ID }}
-        # TenantId of the Azure Service principal created.
-        # tenant-id: ${{ secrets.AZ_TENANT_ID }}
-        # Azure subscriptionId
-        # subscription-id: ${{ secrets.AZ_SUBSCRIPTION_ID }}
-        # Set this value to true to enable Azure PowerShell Login in addition to Az CLI login
-        # enable-AzPSSession: # optional
-        # Name of the environment. Supported values are azurecloud, azurestack, azureusgovernment, azurechinacloud, azuregermancloud. Default being azurecloud
-        # environment: # optional, default is azurecloud
-        # Set this value to true to enable support for accessing tenants without subscriptions
-        # allow-no-subscriptions: # optional
-        # Provide audience field for access-token. Default value is api://AzureADTokenExchange
-        # audience: # optional, default is api://AzureADTokenExchange
+    # - name: Azure Login
+    #   uses: Azure/login@v1
+    #   with:
+    #     # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+    #     # creds: ${{ secrets.AZ_CLIENT_SECRET }}
+    #     # ClientId of the Azure Service principal created.
+    #     # client-id: ${{ secrets.AZ_CLIENT_ID }}
+    #     # TenantId of the Azure Service principal created.
+    #     # tenant-id: ${{ secrets.AZ_TENANT_ID }}
+    #     # Azure subscriptionId
+    #     # subscription-id: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+    #     # Set this value to true to enable Azure PowerShell Login in addition to Az CLI login
+    #     # enable-AzPSSession: # optional
+    #     # Name of the environment. Supported values are azurecloud, azurestack, azureusgovernment, azurechinacloud, azuregermancloud. Default being azurecloud
+    #     # environment: # optional, default is azurecloud
+    #     # Set this value to true to enable support for accessing tenants without subscriptions
+    #     # allow-no-subscriptions: # optional
+    #     # Provide audience field for access-token. Default value is api://AzureADTokenExchange
+    #     # audience: # optional, default is api://AzureADTokenExchange
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -120,7 +120,7 @@ jobs:
       uses: bridgecrewio/checkov-action@v12.641.0
       with:
         # directory with infrastructure code to scan
-        directory: # modules
+        directory: modules
         # Run scan only on a specific check identifier (comma separated)
         # check: # optional
         # Run scan on all checks but a specific check identifier (comma separated)
