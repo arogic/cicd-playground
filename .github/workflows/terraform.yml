@@ -104,6 +104,10 @@ jobs:
     #     # Provide audience field for access-token. Default value is api://AzureADTokenExchange
     #     # audience: # optional, default is api://AzureADTokenExchange
 
+    # Show Terraform Version
+    - name: Terraform Version
+      run: terraform --version
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
