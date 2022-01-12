@@ -15,7 +15,7 @@ module "rg" {
 }
 
 module "vnet" {
-  source               = "/modules/arm_vnet"
+  source               = "./modules/arm_vnet"
   resource_group_name  = module.rg.name
   location             = module.rg.location
   virtual_network_name = var.virtual_network_name
