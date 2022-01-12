@@ -114,9 +114,6 @@ jobs:
       TF_VAR_tenant_id: ${{ secrets.AZ_TENANT_ID }}
       TERRAFORM_VERSION: 1.1.2
     environment: playground
-   # container:
-   #   image: aquasec/tfsec-ci
-   #   options: --user 1001
 
     steps:
     # Download the terraform artifact
