@@ -54,9 +54,19 @@ jobs:
   terraform-init:
     name: 'Terraform Init'
     runs-on: ubuntu-latest
+    env:
+      ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+      ARM_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
+      TF_VAR_subscription_id: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+      TF_VAR_client_id: ${{ secrets.AZ_CLIENT_ID }}
+      TF_VAR_client_secret: ${{ secrets.AZ_CLIENT_SECRET }}
+      TF_VAR_tenant_id: ${{ secrets.AZ_TENANT_ID }}
+      TERRAFORM_VERSION: 1.1.2
+    environment: playground
 
     steps:
-
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v2
@@ -102,7 +112,7 @@ jobs:
       with:
         name: terraform
         path: $GITHUB_WORKSPACE
-        
+
     - name: Run tfsec in dedicated docker container
       run: |
         tfsec
