@@ -122,6 +122,16 @@ jobs:
       with:
         github_token: ${{ github.token }}
 
+    - name: tfsec generate sarif report
+      uses: tfsec/tfsec-sarif-action@main
+      with:
+        sarif_file: tfsec.sarif
+    
+    - name: Upload SARIF report
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: tfsec.sarif
+
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check -diff
