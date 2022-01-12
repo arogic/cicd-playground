@@ -157,8 +157,8 @@ jobs:
 
     - name: Run tfsec in dedicated docker container
       uses: docker://aquasec/tfsec-ci
-      run: |
-        tfsec
+      with:
+        args: tfsec
 
   terraform-plan:
     needs: [tfsec-scan]
