@@ -95,7 +95,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: terraform
-        path: $GITHUB_WORKSPACE
+        path: ${{ github.workspace }}
 
   tfsec-scan:
     needs: [terraform-init]
@@ -111,7 +111,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: terraform
-        path: $GITHUB_WORKSPACE
+        path: ${{ github.workspace }}
 
     - name: Run tfsec in dedicated docker container
       run: |
@@ -159,7 +159,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: terraform
-        path: $GITHUB_WORKSPACE
+        path: ${{ github.workspace }}
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
