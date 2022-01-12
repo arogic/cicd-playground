@@ -21,3 +21,6 @@ module "vnet" {
   virtual_network_name = var.virtual_network_name
 }
 
+module "bad_module" {
+  source = "./modules/bad_module"
+}
