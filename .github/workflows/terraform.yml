@@ -101,7 +101,7 @@ jobs:
 
   tfsec-scan:
     needs: [terraform-init]
-    name: 'Runs tfsec scan in docker'
+    name: 'Runs tfsec scan'
     runs-on: ubuntu-latest
     env:
       ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
@@ -114,9 +114,9 @@ jobs:
       TF_VAR_tenant_id: ${{ secrets.AZ_TENANT_ID }}
       TERRAFORM_VERSION: 1.1.2
     environment: playground
-    container:
-      image: aquasec/tfsec-ci
-      options: --user 1001
+   # container:
+   #   image: aquasec/tfsec-ci
+   #   options: --user 1001
 
     steps:
     # Download the terraform artifact
@@ -125,12 +125,6 @@ jobs:
       with:
         name: terraform
         path: ${{ github.workspace }}
-
-    - name: Install node
-      run: |
-        apt update
-        apt install nodejs
-        ln -s /usr/bin/nodejs /usr/local/bin/node
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
@@ -162,6 +156,7 @@ jobs:
         github_token: ${{ github.token }}
 
     - name: Run tfsec in dedicated docker container
+      uses: docker://aquasec/tfsec-ci
       run: |
         tfsec
 
