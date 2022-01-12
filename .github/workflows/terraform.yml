@@ -95,7 +95,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: terraform
-        path: ${{ github.workspace }}
+        path: |
+         ${{ github.workspace }}
+         !${{ github.workspace }}/.git
+         !${{ github.workspace }}/.github
 
   tfsec-scan:
     needs: [terraform-init]
