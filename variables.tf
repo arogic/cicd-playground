@@ -15,5 +15,7 @@ variable "virtual_network_name" {
 
 variable "tags" {
   description = "Azure Resource Tags"
-  default     = "environment"
+  default = {
+    "environment" = "development"
+  }
 }
