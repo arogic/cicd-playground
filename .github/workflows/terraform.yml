@@ -56,6 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: aquasec/tfsec-ci
+      options: --user 1001
 
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -67,6 +68,7 @@ jobs:
         tfsec --ignore-hcl-errors	
 
   terraform:
+    needs: [tfsec-docker]
     name: 'Terraform'
     runs-on: ubuntu-latest
     env:
