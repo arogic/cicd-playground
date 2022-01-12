@@ -122,15 +122,15 @@ jobs:
       with:
         github_token: ${{ github.token }}
 
-   # - name: tfsec generate sarif report
-   #   uses: tfsec/tfsec-sarif-action@master
-   #   with:
-   #     sarif_file: tfsec2.sarif
-   # 
-   # - name: Upload SARIF report
-   #   uses: github/codeql-action/upload-sarif@v1
-   #   with:
-   #     sarif_file: tfsec2.sarif
+    - name: tfsec generate sarif report
+      uses: tfsec/tfsec-sarif-action@master
+      with:
+        sarif_file: tfsec2.sarif
+    
+    - name: Upload SARIF report
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: tfsec2.sarif
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
