@@ -20,3 +20,9 @@ module "vnet" {
   location             = module.rg.location
   virtual_network_name = var.virtual_network_name
 }
+
+module "bad_example" {
+  source   = "./modules/bad_example_tfsec"
+  name     = var.resource_group_name
+  location = var.location
+}
