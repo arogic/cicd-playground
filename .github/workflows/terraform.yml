@@ -122,16 +122,6 @@ jobs:
       with:
         github_token: ${{ github.token }}
 
-    - name: tfsec generate sarif report
-      uses: tfsec/tfsec-sarif-action@master
-      with:
-        sarif_file: tfsec2.sarif
-    
-    - name: Upload SARIF report
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: tfsec2.sarif 
-
   terraform-plan:
     needs: [tfsec-scan]
     name: 'Terraform Plan'
@@ -160,6 +150,16 @@ jobs:
       with:
         name: terraform
         path: ${{ github.workspace }}
+
+    - name: Generate tfsec sarif report
+      uses: tfsec/tfsec-sarif-action@master
+      with:
+        sarif_file: tfsec2.sarif
+    
+    - name: Upload SARIF report
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: tfsec2.sarif 
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
