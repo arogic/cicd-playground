@@ -51,24 +51,24 @@ on:
   pull_request:
 
 jobs:
-  tfsec-docker:
-    name: 'Runs tfsec in docker'
-    runs-on: ubuntu-latest
-    container:
-      image: aquasec/tfsec-ci
-      options: --user 1001
-
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Run tfsec in dedicated docker container
-      run: |
-        tfsec --ignore-hcl-errors	
+  #tfsec-docker:
+  #  name: 'Runs tfsec in docker'
+  #  runs-on: ubuntu-latest
+  #  container:
+  #    image: aquasec/tfsec-ci
+  #    options: --user 1001
+#
+  #  steps:
+  #  # Checkout the repository to the GitHub Actions runner
+  #  - name: Checkout
+  #    uses: actions/checkout@v2
+#
+  #  - name: Run tfsec in dedicated docker container
+  #    run: |
+  #      tfsec 
 
   terraform:
-    needs: [tfsec-docker]
+   # needs: [tfsec-docker]
     name: 'Terraform'
     runs-on: ubuntu-latest
     env:
@@ -126,18 +126,22 @@ jobs:
       run: terraform --version
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: |
-        terraform init -input=false \
-        -backend-config "resource_group_name=${{ secrets.BACKEND_RESOURCE_GROUP }}" \
-        -backend-config "storage_account_name=${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}" \
-        -backend-config "container_name=${{ secrets.BACKEND_CONTAINER_NAME }}" \
-        -backend-config "key=iac.tfstate"
+  #  - name: Terraform Init
+  #    run: |
+  #      terraform init -input=false \
+  #      -backend-config "resource_group_name=${{ secrets.BACKEND_RESOURCE_GROUP }}" \
+  #      -backend-config "storage_account_name=${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}" \
+  #      -backend-config "container_name=${{ secrets.BACKEND_CONTAINER_NAME }}" \
+  #      -backend-config "key=iac.tfstate"
 
     - name: Run tfsec check
       uses: aquasecurity/tfsec-pr-commenter-action@main
       with:
         github_token: ${{ github.token }}
+
+    - name: Run tfsec in dedicated docker container
+      run: |
+        tfsec 
 
     - name: tfsec generate sarif report
       uses: tfsec/tfsec-sarif-action@master
