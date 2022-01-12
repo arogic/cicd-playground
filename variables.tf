@@ -10,10 +10,10 @@ variable "resource_group_name" {
 
 variable "virtual_network_name" {
   description = "Azure Virtual Network name"
-  default = "vnet-test"
+  default     = "vnet-test"
 }
 
 variable "tags" {
   description = "Azure Resource Tags"
-  default = "environment"
+  default     = "environment"
 }
