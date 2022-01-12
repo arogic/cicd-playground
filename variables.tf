@@ -8,6 +8,11 @@ variable "resource_group_name" {
   default     = "test-rg"
 }
 
+variable "virtual_network_name" {
+  description = "Azure Virtual Network name"
+  default = "vnet-test"
+}
+
 variable "tags" {
   description = "Azure Resource Tags"
   default = {
