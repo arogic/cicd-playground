@@ -197,6 +197,10 @@ jobs:
     - name: Terraform Format
       run: terraform fmt -check -diff
 
+    # Change file permissions
+    - name: Change File Permission
+      run: chmod -R +x ${{ github.workspace }}/.terraform/providers/
+
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan -input=false -compact-warnings
