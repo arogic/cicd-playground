@@ -6,3 +6,6 @@ resource "azurerm_resource_group" "resource_group" {
   location = var.location
   tags     = var.tags
 }
+
+resource {
+
