@@ -113,14 +113,14 @@ jobs:
         name: terraform
         path: ${{ github.workspace }}
 
-    - name: Run tfsec in dedicated docker container
-      run: |
-        tfsec
-
     - name: Run tfsec check pr commenter
       uses: aquasecurity/tfsec-pr-commenter-action@main
       with:
         github_token: ${{ github.token }}
+
+    - name: Run tfsec in dedicated docker container
+      run: |
+        tfsec
 
   terraform-plan:
     needs: [tfsec-scan]
