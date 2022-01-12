@@ -126,6 +126,12 @@ jobs:
         name: terraform
         path: ${{ github.workspace }}
 
+    - name: Install node
+      run: |
+        apt update
+        apt install nodejs
+        ln -s /usr/bin/nodejs /usr/local/bin/node
+
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
