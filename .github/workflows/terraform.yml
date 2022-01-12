@@ -51,6 +51,21 @@ on:
   pull_request:
 
 jobs:
+  tfsec-docker:
+    name: 'Runs tfsec in docker'
+    runs-on: ubuntu-latest
+    container:
+      image: aquasec/tfsec-ci
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Run tfsec in dedicated docker container
+      run: |
+        tfsec --ignore-hcl-errors	
+
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
