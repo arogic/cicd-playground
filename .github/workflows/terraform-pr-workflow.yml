@@ -22,6 +22,10 @@ jobs:
   terraform-validate:
     name: 'Terraform Validate'
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
 
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -61,7 +65,7 @@ jobs:
 
     # tfsec version ?
     - name: Generate tfsec sarif report
-      uses: tfsec/tfsec-sarif-action@master
+      uses: tfsec/tfsec-sarif-action@9a83b5c3524f825c020e356335855741fd02745f
       with:
         sarif_file: tfsec.sarif
 
