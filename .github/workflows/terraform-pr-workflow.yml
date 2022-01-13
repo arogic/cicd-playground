@@ -45,7 +45,7 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        sh ${{ github.workspace }}/.github/scripts/terraform-task.sh init
+        sh . ${{ github.workspace }}/.github/scripts/terraform-task.sh init
       shell: bash
 
     # Checks that all Terraform configuration files adhere to a canonical format
