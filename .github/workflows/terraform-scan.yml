@@ -9,7 +9,7 @@ on:
 jobs:
   tfsec-init:
     name: Terraform Init
-    uses: ${{ github.workspace }}/.github/workflows/terraform-starter.yml@tfsec-job
+    uses: arogic/cicd-playground/.github/workflows/terraform-starter.yml@tfsec-job
     with:
       TERRAFORM_VERSION: 1.1.2
       BACKEND_RESOURCE_GROUP_NAME: ${{ secrets.BACKEND_RESOURCE_GROUP }}
