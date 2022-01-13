@@ -76,7 +76,7 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      if: ${{ env.ACT }}
+      # if: ${{ env.ACT }}
       uses: actions/checkout@v2
 
     # Download the terraform artifact
