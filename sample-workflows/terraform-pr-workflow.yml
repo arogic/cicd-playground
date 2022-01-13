@@ -1,0 +1,201 @@
+name: 'Terraform Pull Request'
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+
+env:
+  ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+  ARM_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
+  TF_VAR_subscription_id: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+  TF_VAR_client_id: ${{ secrets.AZ_CLIENT_ID }}
+  TF_VAR_client_secret: ${{ secrets.AZ_CLIENT_SECRET }}
+  TF_VAR_tenant_id: ${{ secrets.AZ_TENANT_ID }}
+  BACKEND_RESOURCE_GROUP_NAME: ${{ secrets.BACKEND_RESOURCE_GROUP }}
+  BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
+  BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
+  BACKEND_TF_STATE_FILE_NAME: test/inf-k8s.tfstate
+  TERRAFORM_VERSION: 1.1.2
+  # TFSCAN_VERSION: ??
+
+jobs:
+  # terraform-init:
+  #   name: 'Terraform Init'
+  #   runs-on: ubuntu-latest
+  #
+  #   steps:
+  #   # Checkout the repository to the GitHub Actions runner
+  #   - name: Checkout
+  #     uses: actions/checkout@v2
+  #
+  #   - name: List Directory
+  #     run: ls -la
+  #
+  #   # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+  #   - name: Setup Terraform
+  #     uses: hashicorp/setup-terraform@v1
+  #     with:
+  #       cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+  #       terraform_version: ${TERRAFORM_VERSION}
+  #
+  #   # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+  #   - name: Terraform Init
+  #     run: |
+  #       ls -la ${{ github.workspace }}/.github/scripts/terraform-task.sh
+  #       ${{ github.workspace }}/.github/scripts/terraform-task.sh init
+  #
+  #   # Checks that all Terraform configuration files adhere to a canonical format
+  #   - name: Terraform Format
+  #     run: |
+  #       ${{ github.workspace }}/.github/scripts/terraform-task.sh fmt
+  #
+  #   # Terraform validate
+  #   - name: Terraform Validate
+  #     run: |
+  #       ${{ github.workspace }}/.github/scripts/terraform-task.sh validate
+  #
+  #   # Create Terraform Artifact
+  #   - name: Publish Terraform artifact
+  #     if: ${{ !env.ACT }}
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: terraform
+  #       path: |
+  #        ${{ github.workspace }}
+  #        !${{ github.workspace }}/.terraform
+
+  terraform-validate:
+    # needs: [terraform-init]
+    name: 'Terraform Validate'
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      # if: ${{ env.ACT }}
+      uses: actions/checkout@v2
+
+    # Download the terraform artifact
+    # - name: Download the terraform artifact
+    #   if: ${{ !env.ACT }}
+    #   uses: actions/download-artifact@v2
+    #   with:
+    #     name: terraform
+    #     path: ${{ github.workspace }}
+
+    # Install the latest version of Terraform CLI and configure
+    # the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        terraform_version: ${TERRAFORM_VERSION}
+
+    # Initialize a new or existing Terraform working directory
+    # by creating initial files, loading any remote state,
+    # downloading modules, etc.
+    - name: Terraform Init
+      run: |
+        ls -la ${{ github.workspace }}/.github/scripts/terraform-task.sh
+        chmod 0755 ${{ github.workspace }}/.github/scripts/terraform-task.sh
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh init
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: |
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh fmt
+
+    # Terraform validate
+    - name: Terraform Validate
+      run: |
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh validate
+
+    # tfsec version ?
+    - name: Run tfsec check pr commenter
+      uses: aquasecurity/tfsec-pr-commenter-action@main
+      with:
+        github_token: ${{ github.token }}
+
+    # tfsec version ?
+    - name: Generate tfsec sarif report
+      uses: tfsec/tfsec-sarif-action@master
+      with:
+        sarif_file: tfsec.sarif
+
+    # tfsec version ?
+    - name: Upload SARIF report
+      if: ${{ !env.ACT }}
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: tfsec.sarif
+
+    # tfsec version ?
+    - name: Run tfsec in dedicated docker container
+      uses: docker://aquasec/tfsec-ci
+      with:
+        args: tfsec
+
+    # Create Terraform Artifact
+    - name: Publish Terraform artifact
+      if: ${{ !env.ACT }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: terraform
+        path: |
+         ${{ github.workspace }}
+         !${{ github.workspace }}/.terraform
+
+  terraform-plan:
+    needs: [terraform-validate]
+    name: 'Terraform Plan'
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions
+    # runner is ubuntu-latest, macos-latest, or windows-latest
+    # defaults:
+    #   run:
+    #     shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      if: ${{ env.ACT }}
+      uses: actions/checkout@v2
+
+    # Download the terraform artifact
+    - name: Download the terraform artifact
+      if: ${{ !env.ACT }}
+      uses: actions/download-artifact@v2
+      with:
+        name: terraform
+        path: ${{ github.workspace }}
+
+    # Install the latest version of Terraform CLI and configure
+    # the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        terraform_version: ${TERRAFORM_VERSION}
+
+    # Initialize a new or existing Terraform working directory
+    # by creating initial files, loading any remote state,
+    # downloading modules, etc.
+    - name: Terraform Init
+      run: |
+        ls -la ${{ github.workspace }}/.github/scripts/terraform-task.sh
+        chmod 0755 ${{ github.workspace }}/.github/scripts/terraform-task.sh
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh init
+
+    # Change file permissions
+    - name: Change File Permission
+      run: chmod -R +x ${{ github.workspace }}/.terraform/providers/
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      run: |
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh plan
