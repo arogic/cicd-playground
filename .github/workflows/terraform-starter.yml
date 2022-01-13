@@ -1,0 +1,75 @@
+name: Terraform starter workflow
+
+on:
+  workflow_call:
+    inputs:
+      TERRAFORM_VERSION:
+        required: true
+        type: string
+    secrets:
+      ARM_TENANT_ID:
+        required: true
+      ARM_SUBSCRIPTION_ID:
+        required: true
+      ARM_CLIENT_ID:
+        required: true
+      ARM_CLIENT_SECRET:
+        required: true
+      TF_VAR_subscription_id:
+        required: true
+      TF_VAR_client_id:
+        required: true
+      TF_VAR_client_secret:
+        required: true
+      TF_VAR_tenant_id:
+        required: true
+      BACKEND_RESOURCE_GROUP_NAME:
+        required: true
+      BACKEND_STORAGE_ACCOUNT_NAME:
+        required: true
+      BACKEND_CONTAINER_NAME:
+        required: true
+
+jobs:
+  terraform-starter:
+    name: Terraform Init
+    runs-on: ubuntu-latest
+  
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        terraform_version: ${{ inputs.TERRAFORM_VERSION }}
+
+    # Show Terraform Version
+    - name: Terraform Version
+      run: terraform --version
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: |
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh init
+      shell: bash
+
+    - name: Terraform Format
+      run: |
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh fmt
+
+    # Terraform validate
+    - name: Terraform Validate
+      run: |
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh validate
+
+    # Create Terraform Artifact
+    - name: Publish Terraform artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: terraform
+        path: |
+         ${{ github.workspace }}
+         !${{ github.workspace }}/.terraform
