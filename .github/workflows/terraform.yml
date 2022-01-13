@@ -84,19 +84,25 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        terraform init -input=false \
-        -backend-config "resource_group_name=${{ secrets.BACKEND_RESOURCE_GROUP }}" \
-        -backend-config "storage_account_name=${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}" \
-        -backend-config "container_name=${{ secrets.BACKEND_CONTAINER_NAME }}" \
-        -backend-config "key=iac.tfstate"
+        chmod +x ${{ github.workspace }}/.github/scripts/tf-init.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-init.sh
+      shell: bash
+      with:
+        BACKEND_RESOURCE_GROUP: ${{ secrets.BACKEND_RESOURCE_GROUP }}
+        BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
+        BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
-      run: terraform fmt -check -diff
+      run: |
+        chmod +x ${{ github.workspace }}/.github/scripts/tf-fmt.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-fmt.sh
 
     # Terraform validate
     - name: Terraform Validate
-      run: terraform validate
+      run: |
+        chmod +x ${{ github.workspace }}/.github/scripts/tf-validate.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-validate.sh
 
     # Create Terraform Artifact
     - name: Publish Terraform artifact
@@ -145,11 +151,13 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        terraform init -input=false \
-        -backend-config "resource_group_name=${{ secrets.BACKEND_RESOURCE_GROUP }}" \
-        -backend-config "storage_account_name=${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}" \
-        -backend-config "container_name=${{ secrets.BACKEND_CONTAINER_NAME }}" \
-        -backend-config "key=iac.tfstate"
+        chmod +x ${{ github.workspace }}/.github/scripts/tf-init.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-init.sh
+      shell: bash
+      with:
+        BACKEND_RESOURCE_GROUP: ${{ secrets.BACKEND_RESOURCE_GROUP }}
+        BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
+        BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
       
     - name: Run tfsec check pr commenter
       uses: aquasecurity/tfsec-pr-commenter-action@main
@@ -231,11 +239,13 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        terraform init -input=false \
-        -backend-config "resource_group_name=${{ secrets.BACKEND_RESOURCE_GROUP }}" \
-        -backend-config "storage_account_name=${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}" \
-        -backend-config "container_name=${{ secrets.BACKEND_CONTAINER_NAME }}" \
-        -backend-config "key=iac.tfstate"
+        chmod +x ${{ github.workspace }}/.github/scripts/tf-init.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-init.sh
+      shell: bash
+      with:
+        BACKEND_RESOURCE_GROUP: ${{ secrets.BACKEND_RESOURCE_GROUP }}
+        BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
+        BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
 
     # Show Terraform Version
     - name: Terraform Version
@@ -247,7 +257,9 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -input=false -compact-warnings
+      run: |
+        chmod +x ${{ github.workspace }}/.github/scripts/tf-plan.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-plan.sh
 
     - name: Checkov GitHub Action
       # You may pin to the exact commit or the version.
