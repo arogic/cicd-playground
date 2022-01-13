@@ -74,8 +74,14 @@ jobs:
     #     shell: bash
 
     steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      if: ${{ env.ACT }}
+      uses: actions/checkout@v2
+
     # Download the terraform artifact
     - name: Download the terraform artifact
+      if: ${{ !env.ACT }}
       uses: actions/download-artifact@v2
       with:
         name: terraform
@@ -94,20 +100,22 @@ jobs:
     # downloading modules, etc.
     - name: Terraform Init
       run: |
-        sh ${{ github.workspace }}/.github/scripts/terraform-task.sh init
-      shell: bash
+        ls -la ${{ github.workspace }}/.github/scripts/terraform-task.sh
+        chmod 0755 ${{ github.workspace }}/.github/scripts/terraform-task.sh
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh init
 
     # Change file permissions
-    - name: Change File Permission
-      run: chmod -R +x ${{ github.workspace }}/.terraform/providers/
+    # - name: Change File Permission
+    #   run: chmod -R +x ${{ github.workspace }}/.terraform/providers/
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: |
-        sh ${{ github.workspace }}/.github/scripts/terraform-task.sh plan
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh plan
 
     # Create Terraform Artifact
     - name: Publish Terraform artifact
+      if: ${{ !env.ACT }}
       uses: actions/upload-artifact@v2
       with:
         name: terraform_plan
@@ -127,8 +135,14 @@ jobs:
     #     shell: bash
 
     steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      if: ${{ env.ACT }}
+      uses: actions/checkout@v2
+
     # Download the terraform artifact
     - name: Download the terraform artifact
+      if: ${{ !env.ACT }}
       uses: actions/download-artifact@v2
       with:
         name: terraform_plan
@@ -147,14 +161,16 @@ jobs:
     # downloading modules, etc.
     - name: Terraform Init
       run: |
-        sh ${{ github.workspace }}/.github/scripts/terraform-task.sh init
-      shell: bash
+        ls -la ${{ github.workspace }}/.github/scripts/terraform-task.sh
+        chmod 0755 ${{ github.workspace }}/.github/scripts/terraform-task.sh
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh init
 
     # Change file permissions
-    - name: Change File Permission
-      run: chmod -R +x ${{ github.workspace }}/.terraform/providers/
+    # - name: Change File Permission
+    #   run: chmod -R +x ${{ github.workspace }}/.terraform/providers/
 
     # Generates an execution plan for Terraform
     - name: Terraform Apply
       run: |
-        sh ${{ github.workspace }}/.github/scripts/terraform-task.sh apply
+        echo "Terraform Apply"
+        # sh ${{ github.workspace }}/.github/scripts/terraform-task.sh apply
