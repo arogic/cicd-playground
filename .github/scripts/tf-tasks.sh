@@ -21,9 +21,9 @@ validate() {
 plan() {
   terraform plan \
   -compact-warnings \
-  -input=false \
-  -var-file="./tfvars.json" \
-  -out="./tfplan.out"
+  -input=false
+#  -var-file="./tfvars.json" \
+#  -out="./tfplan.out"
 }
 
 apply() {
