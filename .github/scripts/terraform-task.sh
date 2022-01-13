@@ -38,5 +38,5 @@ case $TASK in
   'format') fmt();;
   'validate') validate();;
   'plan') plan();;
-  'apply') apply;;
+  'apply') apply();;
 esac

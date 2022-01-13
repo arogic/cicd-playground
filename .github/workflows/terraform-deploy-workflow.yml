@@ -63,7 +63,7 @@ jobs:
   #        # !${{ github.workspace }}/.terraform
 
   terraform-plan:
-    needs: [terraform-init]
+    # needs: [terraform-init]
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
 
