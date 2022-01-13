@@ -95,13 +95,11 @@ jobs:
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: |
-        chmod +x ${{ github.workspace }}/.github/scripts/tf-fmt.sh
         sh ${{ github.workspace }}/.github/scripts/tf-fmt.sh
 
     # Terraform validate
     - name: Terraform Validate
       run: |
-        chmod +x ${{ github.workspace }}/.github/scripts/tf-validate.sh
         sh ${{ github.workspace }}/.github/scripts/tf-validate.sh
 
     # Create Terraform Artifact
@@ -150,7 +148,6 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        chmod +x ${{ github.workspace }}/.github/scripts/tf-init.sh
         sh ${{ github.workspace }}/.github/scripts/tf-init.sh
       shell: bash
       
@@ -233,7 +230,6 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        chmod +x ${{ github.workspace }}/.github/scripts/tf-init.sh
         sh ${{ github.workspace }}/.github/scripts/tf-init.sh
       shell: bash
 
@@ -248,7 +244,6 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: |
-        chmod +x ${{ github.workspace }}/.github/scripts/tf-plan.sh
         sh ${{ github.workspace }}/.github/scripts/tf-plan.sh
 
     - name: Checkov GitHub Action
