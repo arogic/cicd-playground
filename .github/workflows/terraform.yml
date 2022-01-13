@@ -50,6 +50,12 @@ on:
     - main
   pull_request:
 
+env:
+  BACKEND_RESOURCE_GROUP_NAME: ${{ secrets.BACKEND_RESOURCE_GROUP }}
+  BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
+  BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
+  TERRAFORM_VERSION: 1.1.2
+  
 jobs:
   terraform-init:
     name: 'Terraform Init'
@@ -63,7 +69,6 @@ jobs:
       TF_VAR_client_id: ${{ secrets.AZ_CLIENT_ID }}
       TF_VAR_client_secret: ${{ secrets.AZ_CLIENT_SECRET }}
       TF_VAR_tenant_id: ${{ secrets.AZ_TENANT_ID }}
-      TERRAFORM_VERSION: 1.1.2
     environment: playground
 
     steps:
@@ -87,10 +92,6 @@ jobs:
         chmod +x ${{ github.workspace }}/.github/scripts/tf-init.sh
         sh ${{ github.workspace }}/.github/scripts/tf-init.sh
       shell: bash
-      with:
-        BACKEND_RESOURCE_GROUP: ${{ secrets.BACKEND_RESOURCE_GROUP }}
-        BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
-        BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
@@ -126,7 +127,6 @@ jobs:
       TF_VAR_client_id: ${{ secrets.AZ_CLIENT_ID }}
       TF_VAR_client_secret: ${{ secrets.AZ_CLIENT_SECRET }}
       TF_VAR_tenant_id: ${{ secrets.AZ_TENANT_ID }}
-      TERRAFORM_VERSION: 1.1.2
     environment: playground
 
     steps:
@@ -154,10 +154,6 @@ jobs:
         chmod +x ${{ github.workspace }}/.github/scripts/tf-init.sh
         sh ${{ github.workspace }}/.github/scripts/tf-init.sh
       shell: bash
-      with:
-        BACKEND_RESOURCE_GROUP: ${{ secrets.BACKEND_RESOURCE_GROUP }}
-        BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
-        BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
       
     - name: Run tfsec check pr commenter
       uses: aquasecurity/tfsec-pr-commenter-action@main
@@ -192,7 +188,6 @@ jobs:
       TF_VAR_client_id: ${{ secrets.AZ_CLIENT_ID }}
       TF_VAR_client_secret: ${{ secrets.AZ_CLIENT_SECRET }}
       TF_VAR_tenant_id: ${{ secrets.AZ_TENANT_ID }}
-      TERRAFORM_VERSION: 1.1.2
     environment: playground
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -242,10 +237,6 @@ jobs:
         chmod +x ${{ github.workspace }}/.github/scripts/tf-init.sh
         sh ${{ github.workspace }}/.github/scripts/tf-init.sh
       shell: bash
-      with:
-        BACKEND_RESOURCE_GROUP: ${{ secrets.BACKEND_RESOURCE_GROUP }}
-        BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
-        BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
 
     # Show Terraform Version
     - name: Terraform Version
