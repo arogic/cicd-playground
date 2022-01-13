@@ -1,4 +1,4 @@
-name: 'Terraform Pull Request Workflow'
+name: 'Terraform Pull Request'
 
 on:
   push:
@@ -64,61 +64,61 @@ jobs:
          ${{ github.workspace }}
          !${{ github.workspace }}/.terraform
 
-  tfsec-scan:
-    needs: [terraform-init]
-    name: 'Runs tfsec scan'
-    runs-on: ubuntu-latest
-
-    steps:
-    # Download the terraform artifact
-    - name: Download the terraform artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: terraform
-        path: ${{ github.workspace }}
-
-    # Install the latest version of Terraform CLI and configure
-    # the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-        terraform_version: ${TERRAFORM_VERSION}
-
-    # Initialize a new or existing Terraform working directory
-    # by creating initial files, loading any remote state,
-    # downloading modules, etc.
-    - name: Terraform Init
-      run: |
-        sh ${{ github.workspace }}/.github/scripts/terraform-task.sh init
-      shell: bash
-
-    # tfsec version ?
-    - name: Run tfsec check pr commenter
-      uses: aquasecurity/tfsec-pr-commenter-action@main
-      with:
-        github_token: ${{ github.token }}
-
-    # tfsec version ?
-     - name: Generate tfsec sarif report
-       uses: tfsec/tfsec-sarif-action@master
-       with:
-         sarif_file: tfsec.sarif
-
-    # tfsec version ?
-    - name: Upload SARIF report
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: tfsec.sarif
-
-    # tfsec version ?
-    - name: Run tfsec in dedicated docker container
-      uses: docker://aquasec/tfsec-ci
-      with:
-        args: tfsec
+  # tfsec-scan:
+  #   needs: [terraform-init]
+  #   name: 'Run tfsec scan'
+  #   runs-on: ubuntu-latest
+  #
+  #   steps:
+  #   # Download the terraform artifact
+  #   - name: Download the terraform artifact
+  #     uses: actions/download-artifact@v2
+  #     with:
+  #       name: terraform
+  #       path: ${{ github.workspace }}
+  #
+  #   # Install the latest version of Terraform CLI and configure
+  #   # the Terraform CLI configuration file with a Terraform Cloud user API token
+  #   - name: Setup Terraform
+  #     uses: hashicorp/setup-terraform@v1
+  #     with:
+  #       cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+  #       terraform_version: ${TERRAFORM_VERSION}
+  #
+  #   # Initialize a new or existing Terraform working directory
+  #   # by creating initial files, loading any remote state,
+  #   # downloading modules, etc.
+  #   - name: Terraform Init
+  #     run: |
+  #       sh ${{ github.workspace }}/.github/scripts/terraform-task.sh init
+  #     shell: bash
+  #
+  #   # tfsec version ?
+  #   - name: Run tfsec check pr commenter
+  #     uses: aquasecurity/tfsec-pr-commenter-action@main
+  #     with:
+  #       github_token: ${{ github.token }}
+  #
+  #   # tfsec version ?
+  #    - name: Generate tfsec sarif report
+  #      uses: tfsec/tfsec-sarif-action@master
+  #      with:
+  #        sarif_file: tfsec.sarif
+  #
+  #   # tfsec version ?
+  #   - name: Upload SARIF report
+  #     uses: github/codeql-action/upload-sarif@v1
+  #     with:
+  #       sarif_file: tfsec.sarif
+  #
+  #   # tfsec version ?
+  #   - name: Run tfsec in dedicated docker container
+  #     uses: docker://aquasec/tfsec-ci
+  #     with:
+  #       args: tfsec
 
   terraform-plan:
-    needs: [tfsec-scan]
+    # needs: [tfsec-scan]
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
 
@@ -130,11 +130,11 @@ jobs:
 
     steps:
     # Download the terraform artifact
-    - name: Download the terraform artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: terraform
-        path: ${{ github.workspace }}
+    # - name: Download the terraform artifact
+    #   uses: actions/download-artifact@v2
+    #   with:
+    #     name: terraform
+    #     path: ${{ github.workspace }}
 
     # Install the latest version of Terraform CLI and configure
     # the Terraform CLI configuration file with a Terraform Cloud user API token

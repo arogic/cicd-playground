@@ -1,4 +1,4 @@
-name: 'Terraform Deployment Workflow'
+name: 'Terraform Deployment'
 
 on:
   push:
@@ -97,7 +97,7 @@ jobs:
         sh ${{ github.workspace }}/.github/scripts/terraform-task.sh init
       shell: bash
 
-    Change file permissions
+    # Change file permissions
     - name: Change File Permission
       run: chmod -R +x ${{ github.workspace }}/.terraform/providers/
 
