@@ -34,9 +34,9 @@ function apply() {
 }
 
 case $TASK in
-  'init') init();;
-  'format') fmt();;
-  'validate') validate();;
-  'plan') plan();;
-  'apply') apply();;
+  'init') init;;
+  'format') format;;
+  'validate') validate;;
+  'plan') plan;;
+  'apply') apply;;
 esac
