@@ -51,12 +51,12 @@ jobs:
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: |
-        sh ${{ github.workspace }}/.github/scripts/terraform-task.sh fmt
+        sh . ${{ github.workspace }}/.github/scripts/terraform-task.sh fmt
 
     # Terraform validate
     - name: Terraform Validate
       run: |
-        sh ${{ github.workspace }}/.github/scripts/terraform-task.sh validate
+        sh . ${{ github.workspace }}/.github/scripts/terraform-task.sh validate
 
     # Create Terraform Artifact
     - name: Publish Terraform artifact
@@ -153,7 +153,7 @@ jobs:
     # downloading modules, etc.
     - name: Terraform Init
       run: |
-        sh ${{ github.workspace }}/.github/scripts/terraform-task.sh init
+        sh . ${{ github.workspace }}/.github/scripts/terraform-task.sh init
       shell: bash
 
     # Change file permissions
@@ -163,4 +163,4 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: |
-        sh ${{ github.workspace }}/.github/scripts/terraform-task.sh plan
+        sh . ${{ github.workspace }}/.github/scripts/terraform-task.sh plan
