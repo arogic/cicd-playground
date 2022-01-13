@@ -2,7 +2,7 @@
 
 TASK=$1
 
-function init() {
+function init {
   terraform init -input=false \
   -backend-config "resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
   -backend-config "storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME" \
@@ -10,15 +10,15 @@ function init() {
   -backend-config "key=iac.tfstate"
 }
 
-function fmt() {
+function fmt {
   terraform fmt -check -diff
 }
 
-function validate() {
+function validate {
   terraform validate
 }
 
-function plan() {
+function plan {
   terraform plan \
   -compact-warnings \
   -input=false \
@@ -26,7 +26,7 @@ function plan() {
   -out="./tfplan.out"
 }
 
-function apply() {
+function apply {
   terraform apply \
   -input=false \
   -compact-warnings \
@@ -34,9 +34,9 @@ function apply() {
 }
 
 case $TASK in
-  'init') init();;
-  'fmt') fmt();;
-  'validate') validate();;
-  'plan') plan();;
+  'init') init;;
+  'fmt') fmt;;
+  'validate') validate;;
+  'plan') plan;;
   'apply') apply;;
 esac
