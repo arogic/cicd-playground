@@ -104,6 +104,8 @@ jobs:
     # downloading modules, etc.
     - name: Terraform Init
       run: |
+        ls -la ${{ github.workspace }}/.github/scripts/terraform-task.sh
+        chmod 0755 ${{ github.workspace }}/.github/scripts/terraform-task.sh
         ${{ github.workspace }}/.github/scripts/terraform-task.sh init
 
     # tfsec version ?
@@ -169,6 +171,8 @@ jobs:
     # downloading modules, etc.
     - name: Terraform Init
       run: |
+        ls -la ${{ github.workspace }}/.github/scripts/terraform-task.sh
+        chmod 0755 ${{ github.workspace }}/.github/scripts/terraform-task.sh
         ${{ github.workspace }}/.github/scripts/terraform-task.sh init
 
     # Change file permissions
