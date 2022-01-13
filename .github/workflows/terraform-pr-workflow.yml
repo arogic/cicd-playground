@@ -70,7 +70,7 @@ jobs:
 
   terraform-validate:
     # needs: [terraform-init]
-    name: 'Run tfsec scan'
+    name: 'Terraform Validate'
     runs-on: ubuntu-latest
 
     steps:
