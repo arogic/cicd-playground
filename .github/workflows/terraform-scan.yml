@@ -12,6 +12,7 @@ jobs:
     uses: arogic/cicd-playground/.github/workflows/terraform-starter.yml@tfsec-job
     with:
       TERRAFORM_VERSION: 1.1.2
+    secrets:
       BACKEND_RESOURCE_GROUP_NAME: ${{ secrets.BACKEND_RESOURCE_GROUP }}
       BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
       BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
