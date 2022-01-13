@@ -26,6 +26,7 @@ jobs:
       TF_VAR_tenant_id: ${{ secrets.AZ_TENANT_ID }}
 
   tfsec-scan:
+    needs: [tfsec-init]
     name: Run tfsec scan
     runs-on: ubuntu-latest
 

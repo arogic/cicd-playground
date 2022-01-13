@@ -26,6 +26,7 @@ jobs:
       TF_VAR_tenant_id: ${{ secrets.AZ_TENANT_ID }}
 
   terraform-plan:
+    needs: [tfsec-init]
     name: Terraform Plan
     runs-on: ubuntu-latest
 

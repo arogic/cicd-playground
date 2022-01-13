@@ -47,6 +47,7 @@ jobs:
       BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
       BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
       TERRAFORM_VERSION: 1.1.2
+    environment: playground
   
     steps:
     # Checkout the repository to the GitHub Actions runner
