@@ -78,16 +78,6 @@ jobs:
       with:
         args: tfsec
 
-    # Create Terraform Artifact
-    - name: Publish Terraform artifact
-      if: ${{ !env.ACT }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: terraform
-        path: |
-         ${{ github.workspace }}
-         !${{ github.workspace }}/.terraform
-
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: |
