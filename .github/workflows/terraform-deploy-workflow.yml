@@ -3,7 +3,9 @@ name: 'Terraform Deployment'
 on:
   push:
     branches:
-    - main
+      - main
+    # paths:
+    #   - ./apps/infrastructure/terraform
 
 env:
   ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}

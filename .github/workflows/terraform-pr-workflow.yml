@@ -1,9 +1,9 @@
 name: 'Terraform Pull Request'
 
 on:
-  push:
-    branches:
-    - main
+  # push:
+  #   paths:
+  #     - './'
   pull_request:
 
 env:
