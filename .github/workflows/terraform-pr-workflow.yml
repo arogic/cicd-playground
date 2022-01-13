@@ -134,11 +134,11 @@ jobs:
 
     steps:
     # Download the terraform artifact
-    # - name: Download the terraform artifact
-    #   uses: actions/download-artifact@v2
-    #   with:
-    #     name: terraform
-    #     path: ${{ github.workspace }}
+    - name: Download the terraform artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: terraform
+        path: ${{ github.workspace }}
 
     # Install the latest version of Terraform CLI and configure
     # the Terraform CLI configuration file with a Terraform Cloud user API token
