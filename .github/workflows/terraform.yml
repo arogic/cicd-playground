@@ -89,18 +89,18 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        sh ${{ github.workspace }}/.github/scripts/tf-init.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh init
       shell: bash
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: |
-        sh ${{ github.workspace }}/.github/scripts/tf-fmt.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh fmt
 
     # Terraform validate
     - name: Terraform Validate
       run: |
-        sh ${{ github.workspace }}/.github/scripts/tf-validate.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh validate
 
     # Create Terraform Artifact
     - name: Publish Terraform artifact
@@ -148,7 +148,7 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        sh ${{ github.workspace }}/.github/scripts/tf-init.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh init
       shell: bash
       
     - name: Run tfsec check pr commenter
@@ -230,7 +230,7 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        sh ${{ github.workspace }}/.github/scripts/tf-init.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh init
       shell: bash
 
     # Show Terraform Version
@@ -244,7 +244,7 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: |
-        sh ${{ github.workspace }}/.github/scripts/tf-plan.sh
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh plan
 
     - name: Checkov GitHub Action
       # You may pin to the exact commit or the version.
@@ -297,5 +297,5 @@ jobs:
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: |
-        echo "Terraform Apply Task here"
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh apply
       # run: terraform apply -auto-approve -input=false -compact-warnings
