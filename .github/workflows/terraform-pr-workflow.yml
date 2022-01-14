@@ -91,7 +91,7 @@ jobs:
     # tfsec version ?
     - name: Run tfsec
       # uses: docker://aquasec/tfsec-ci
-      uses: docker://aquasec/tfsec-ci:$TFSEC_VERSION
+      uses: docker://aquasec/tfsec-ci:v0.63.1
       with:
         args: tfsec $TFSEC_WORKING_DIR --tfvars-file $TFSEC_WORKING_DIR/test.tfvars
         # working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/good-example
