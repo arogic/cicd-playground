@@ -1,0 +1,59 @@
+name: Terraform Scan
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+
+jobs:
+  tfsec-init:
+    name: Terraform Init
+    uses: arogic/cicd-playground/.github/workflows/terraform-starter.yml@tfsec-job
+    with:
+      TERRAFORM_VERSION: 1.1.2
+    secrets:
+      BACKEND_RESOURCE_GROUP_NAME: ${{ secrets.BACKEND_RESOURCE_GROUP }}
+      BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
+      BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
+      ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+      ARM_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
+      TF_VAR_subscription_id: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+      TF_VAR_client_id: ${{ secrets.AZ_CLIENT_ID }}
+      TF_VAR_client_secret: ${{ secrets.AZ_CLIENT_SECRET }}
+      TF_VAR_tenant_id: ${{ secrets.AZ_TENANT_ID }}
+
+  tfsec-scan:
+    needs: [tfsec-init]
+    name: Run tfsec scan
+    runs-on: ubuntu-latest
+
+    steps:
+    # Download the terraform artifact
+    - name: Download the terraform artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: terraform
+        path: ${{ github.workspace }}
+
+    - name: Run tfsec check pr commenter
+      uses: aquasecurity/tfsec-pr-commenter-action@main
+      with:
+        github_token: ${{ github.token }}
+
+    - name: Generate tfsec sarif report
+      uses: tfsec/tfsec-sarif-action@master
+      with:
+        sarif_file: tfsec.sarif
+    
+    - name: Upload SARIF report
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: tfsec.sarif 
+
+    - name: Run tfsec in dedicated docker container
+      uses: docker://aquasec/tfsec-ci
+      with:
+        args: tfsec

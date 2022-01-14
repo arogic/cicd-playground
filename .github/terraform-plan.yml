@@ -1,0 +1,107 @@
+name: Terraform Plan
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+
+jobs:
+  tfsec-init:
+    name: Terraform Init
+    uses: arogic/cicd-playground/.github/workflows/terraform-starter.yml@tfsec-job
+    with:
+      TERRAFORM_VERSION: 1.1.2
+    secrets:
+      BACKEND_RESOURCE_GROUP_NAME: ${{ secrets.BACKEND_RESOURCE_GROUP }}
+      BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
+      BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
+      ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+      ARM_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
+      TF_VAR_subscription_id: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+      TF_VAR_client_id: ${{ secrets.AZ_CLIENT_ID }}
+      TF_VAR_client_secret: ${{ secrets.AZ_CLIENT_SECRET }}
+      TF_VAR_tenant_id: ${{ secrets.AZ_TENANT_ID }}
+
+  terraform-plan:
+    needs: [tfsec-init]
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Download the terraform artifact
+    - name: Download the terraform artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: terraform
+        path: ${{ github.workspace }}
+
+    # Change file permissions
+    - name: Change File Permission
+      run: chmod -R +x ${{ github.workspace }}/.terraform/providers/
+
+   # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      run: |
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh plan
+
+    - name: Checkov GitHub Action
+      # You may pin to the exact commit or the version.
+      # uses: bridgecrewio/checkov-action@00cc657f4d415593e5c8897bc87f490497ccb5f9
+      uses: bridgecrewio/checkov-action@v12.641.0
+      with:
+        # directory with infrastructure code to scan
+        directory: modules
+        # Run scan only on a specific check identifier (comma separated)
+        # check: # optional
+        # Run scan on all checks but a specific check identifier (comma separated)
+        # skip_check: # optional
+        # display only failed checks
+        # quiet: # optional
+        # do not return an error code if there are failed checks
+        # soft_fail: # optional
+        # run only on a specific infrastructure
+        framework: terraform
+        # comma separated list of external (custom) checks directories
+        # external_checks_dirs: # optional
+        # comma separated list of external (custom) checks repositories
+        # external_checks_repos: # optional
+        # The format of the output. cli, json, junitxml, github_failed_only
+        # output_format: # optional
+        # download external terraform modules from public git repositories and terraform registry:true, false
+        # download_external_modules: # optional
+        # log level
+        # log_level: # optional, default is WARNING
+
+    # - name: Wait for Terraform Plan Approval
+    #   # You may pin to the exact commit or the version.
+    #   # uses: jbergknoff/github-action-wait-for-terraform-plan-approval@ff23ef35b5f0ee7f41a5e9df6cc5df1700f0c6e6
+    #   uses: jbergknoff/github-action-wait-for-terraform-plan-approval@v1
+    #   with:
+    #     # What to do: either `submit` or `wait`.
+    #     command: # default is submit
+    #     # The contents of the plan. ANSI color codes are fine. This should be plaintext, not base64-encoded. Required when `command == submit`.
+    #     plan_contents: # optional
+    #     # The plan id to wait for. Required when `command == wait`.
+    #     plan_id: # optional
+    #     # Base URL for the external service that will display plans for approval
+    #     external_service_url: # optional, default is https://terraform-plan-approval.herokuapp.com
+    #     # Give up waiting for approval/rejection after this many seconds
+    #     timeout_seconds: # optional, default is 300
+    #     # The interval (in seconds) at which we'll check the plan status
+    #     polling_period_seconds: # optional, default is 5
+
+      # On push to main, build or change infrastructure according to Terraform configuration files
+      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        sh ${{ github.workspace }}/.github/scripts/tf-tasks.sh apply
+      # run: terraform apply -auto-approve -input=false -compact-warnings
