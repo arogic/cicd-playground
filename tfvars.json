@@ -1,0 +1,8 @@
+{
+  "resource_group_name": "rg-test",
+  "location": "westeurope",
+  "tags": {
+    "owner": "john.doe@example.com",
+    "environment": "development"
+  }
+}

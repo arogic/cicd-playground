@@ -1,0 +1,84 @@
+name: 'Terraform Pull Request'
+
+on:
+  # push:
+  #   paths:
+  #     - './'
+  pull_request:
+
+env:
+  ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+  ARM_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
+  BACKEND_RESOURCE_GROUP_NAME: ${{ secrets.BACKEND_RESOURCE_GROUP }}
+  BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
+  BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
+  BACKEND_TF_STATE_FILE_NAME: test/inf.tfstate
+  TERRAFORM_VERSION: 1.1.2
+  # TFSCAN_VERSION: ??
+
+jobs:
+  terraform-validate:
+    name: 'Terraform Validate'
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Install the latest version of Terraform CLI and configure
+    # the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        terraform_version: ${TERRAFORM_VERSION}
+
+    # Initialize a new or existing Terraform working directory
+    # by creating initial files, loading any remote state,
+    # downloading modules, etc.
+    - name: Terraform Init
+      run: |
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh init
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: |
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh fmt
+
+    # Terraform validate
+    - name: Terraform Validate
+      run: |
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh validate
+
+    # tfsec version ?
+    - name: Run tfsec check pr commenter
+      uses: aquasecurity/tfsec-pr-commenter-action@main
+      with:
+        github_token: ${{ github.token }}
+
+    # tfsec version ?
+    - name: Generate tfsec sarif report
+      uses: tfsec/tfsec-sarif-action@master
+      with:
+        sarif_file: tfsec.sarif
+
+    # tfsec version ?
+    - name: Upload SARIF report
+      if: ${{ !env.ACT }}
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: tfsec.sarif
+
+    # tfsec version ?
+    - name: Run tfsec in dedicated docker container
+      uses: docker://aquasec/tfsec-ci
+      with:
+        args: tfsec
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      run: |
+        ${{ github.workspace }}/.github/scripts/terraform-task.sh plan
