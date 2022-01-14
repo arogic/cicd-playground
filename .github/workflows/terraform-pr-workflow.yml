@@ -39,7 +39,7 @@ jobs:
       uses: hashicorp/setup-terraform@v1
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-        terraform_version: ${TERRAFORM_VERSION}
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
 
     # Initialize a new or existing Terraform working directory
     # by creating initial files, loading any remote state,
@@ -67,15 +67,17 @@ jobs:
 
     # tfsec version ?
     - name: Run tfsec check pr commenter
+      if: ${{ !env.ACT }}
       uses: aquasecurity/tfsec-pr-commenter-action@main
       with:
-        tfsec_version: $TFSEC_VERSION
+        tfsec_version: ${{ env.TFSEC_VERSION }}
         github_token: ${{ github.token }}
-        working_directory: $TFSEC_WORKING_DIR
+        working_directory: ${{ env.TFSEC_WORKING_DIR }}
         # working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/bad-example
 
     # tfsec version ?
     - name: Generate tfsec sarif report
+      if: ${{ !env.ACT }}
       uses: tfsec/tfsec-sarif-action@master
       with:
         sarif_file: tfsec.sarif
@@ -91,9 +93,10 @@ jobs:
     # tfsec version ?
     - name: Run tfsec
       # uses: docker://aquasec/tfsec-ci
+      # uses: docker://aquasec/tfsec-ci:${{ env.TFSEC_VERSION }}
       uses: docker://aquasec/tfsec-ci:v0.63.1
       with:
-        args: tfsec $TFSEC_WORKING_DIR --tfvars-file $TFSEC_WORKING_DIR/test.tfvars
+        args: tfsec ${{ env.TFSEC_WORKING_DIR }} --tfvars-file ${{ env.TFSEC_WORKING_DIR }}/test.tfvars
         # working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/good-example
 
     # Generates an execution plan for Terraform
