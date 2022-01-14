@@ -8,7 +8,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./apps/infrastructure/terraform/good-example
+    working-directory: ./apps/infrastructure/terraform/bad-example
 
 env:
   ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
@@ -69,7 +69,7 @@ jobs:
       uses: aquasecurity/tfsec-pr-commenter-action@main
       with:
         github_token: ${{ github.token }}
-        working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/good-example
+        working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/bad-example
 
     # tfsec version ?
     - name: Generate tfsec sarif report
@@ -89,7 +89,7 @@ jobs:
     - name: Run tfsec
       uses: docker://aquasec/tfsec-ci
       with:
-        args: tfsec ./apps/infrastructure/terraform/good-example --tfvars-file ./apps/infrastructure/terraform/good-example/test.tfvars
+        args: tfsec ./apps/infrastructure/terraform/bad-example --tfvars-file ./apps/infrastructure/terraform/bad-example/test.tfvars
         # working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/good-example
 
     # Generates an execution plan for Terraform
