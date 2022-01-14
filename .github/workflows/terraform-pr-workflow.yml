@@ -69,6 +69,7 @@ jobs:
       uses: aquasecurity/tfsec-pr-commenter-action@main
       with:
         github_token: ${{ github.token }}
+        working_directory: ./apps/infrastructure/terraform/good-example
 
     # tfsec version ?
     - name: Generate tfsec sarif report
