@@ -72,7 +72,7 @@ jobs:
       with:
         tfsec_version: ${{ env.TFSEC_VERSION }}
         github_token: ${{ github.token }}
-        working_directory: ${{ env.TFSEC_WORKING_DIR }}
+        # working_directory: ${{ env.TFSEC_WORKING_DIR }}
         # working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/bad-example
 
     # tfsec version ?
