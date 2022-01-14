@@ -69,7 +69,7 @@ jobs:
       uses: aquasecurity/tfsec-pr-commenter-action@main
       with:
         github_token: ${{ github.token }}
-        working_directory: ./apps/infrastructure/terraform/good-example
+        working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/good-example
 
     # tfsec version ?
     - name: Generate tfsec sarif report
@@ -90,7 +90,7 @@ jobs:
       uses: docker://aquasec/tfsec-ci
       with:
         args: tfsec
-        working_directory: ./apps/infrastructure/terraform/good-example
+        working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/good-example
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
