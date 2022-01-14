@@ -89,8 +89,8 @@ jobs:
     - name: Run tfsec
       uses: docker://aquasec/tfsec-ci
       with:
-        args: tfsec
-        working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/good-example
+        args: tfsec ./apps/infrastructure/terraform/good-example --tfvars-file ./apps/infrastructure/terraform/good-example/test.tfvars
+        # working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/good-example
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
