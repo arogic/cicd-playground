@@ -21,6 +21,9 @@ module "vnet" {
   virtual_network_name = var.virtual_network_name
 }
 
-module "bad_module" {
-  source = "./modules/bad_module"
+resource "azurerm_app_service" "bad_example" {
+  name                = "example-app-service"
+  location            = module.rg.location
+  resource_group_name = module.rg.name
+  app_service_plan_id = "1231313123131231"
 }
