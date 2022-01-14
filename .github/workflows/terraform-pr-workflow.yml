@@ -90,6 +90,7 @@ jobs:
       uses: docker://aquasec/tfsec-ci
       with:
         args: tfsec
+        working_directory: ./apps/infrastructure/terraform/good-example
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
