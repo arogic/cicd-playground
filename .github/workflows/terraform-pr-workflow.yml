@@ -20,7 +20,8 @@ env:
   BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
   BACKEND_TF_STATE_FILE_NAME: test/inf.tfstate
   TERRAFORM_VERSION: 1.1.2
-  # TFSCAN_VERSION: ??
+  TFSEC_VERSION: v0.63.1
+  TFSEC_WORKING_DIR: ./apps/infrastructure/terraform/bad-example
 
 jobs:
   terraform-validate:
@@ -68,8 +69,10 @@ jobs:
     - name: Run tfsec check pr commenter
       uses: aquasecurity/tfsec-pr-commenter-action@main
       with:
+        tfsec_version: $TFSEC_VERSION
         github_token: ${{ github.token }}
-        working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/bad-example
+        working_directory: $TFSEC_WORKING_DIR
+        # working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/bad-example
 
     # tfsec version ?
     - name: Generate tfsec sarif report
@@ -87,9 +90,10 @@ jobs:
 
     # tfsec version ?
     - name: Run tfsec
-      uses: docker://aquasec/tfsec-ci
+      # uses: docker://aquasec/tfsec-ci
+      uses: docker://aquasec/tfsec-ci:$TFSEC_VERSION
       with:
-        args: tfsec ./apps/infrastructure/terraform/bad-example --tfvars-file ./apps/infrastructure/terraform/bad-example/test.tfvars
+        args: tfsec $TFSEC_WORKING_DIR --tfvars-file $TFSEC_WORKING_DIR/test.tfvars
         # working_directory: ${{ github.workspace }}/apps/infrastructure/terraform/good-example
 
     # Generates an execution plan for Terraform
