@@ -75,6 +75,7 @@ jobs:
       uses: tfsec/tfsec-sarif-action@master
       with:
         sarif_file: tfsec.sarif
+        working_directory: ./apps/infrastructure/terraform/bad-example
 
     # tfsec version ?
     - name: Upload SARIF report
