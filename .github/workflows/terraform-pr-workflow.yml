@@ -8,7 +8,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./apps/infrastructure/terraform/bad-example
+    working-directory: ./apps/infrastructure/terraform/good-example
 
 env:
   ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
@@ -75,7 +75,7 @@ jobs:
       uses: tfsec/tfsec-sarif-action@master
       with:
         sarif_file: tfsec.sarif
-        working_directory: ./apps/infrastructure/terraform/bad-example
+        # working_directory: ./apps/infrastructure/terraform/bad-example
 
     # tfsec version ?
     - name: Upload SARIF report

@@ -9,7 +9,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./apps/infrastructure/terraform/bad-example
+    working-directory: ./apps/infrastructure/terraform/good-example
 
 env:
   ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
