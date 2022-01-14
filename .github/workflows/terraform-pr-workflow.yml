@@ -8,7 +8,7 @@ on:
 
 defaults:
   run:
-    working-directory: ${{ github.workspace }}/apps/infrastructure/terraform
+    working-directory: ./apps/infrastructure/terraform
 
 env:
   ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
