@@ -79,7 +79,7 @@ jobs:
       uses: azure/k8s-bake@v1
       with:
         renderEngine: 'kompose'
-        dockerComposeFile: ${{ env.DOCKER_COMPOSE_PATH }}
+        dockerComposeFile: './sample-app/docker-compose.yml'
         kompose-version: 'latest' 
       id: bake
 
