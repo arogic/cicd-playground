@@ -62,7 +62,7 @@ jobs:
     - name: Build front image on ACR
       uses: azure/CLI@v1
       with:
-        azcliversion: 2.29.1
+        azcliversion: 2.29.2
         inlineScript: |
           az configure --defaults acr=${{ env.AZURE_CONTAINER_REGISTRY }}
           cd $GITHUB_WORKSPACE/sample-app/azure-vote
