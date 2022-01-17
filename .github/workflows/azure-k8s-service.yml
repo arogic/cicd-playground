@@ -30,6 +30,8 @@
 # https://github.com/Azure/k8s-bake
 # https://github.com/Azure/k8s-deploy   
 
+name: 'Deploy to AKS'
+
 ##on: [push]
 #on:
 #  push:
