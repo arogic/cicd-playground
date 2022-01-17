@@ -9,8 +9,8 @@ services:
         - "6379:6379"
 
   azure-vote-front:
-    build: ./azure-vote
-    image: mcr.microsoft.com/azuredocs/azure-vote-front:v1
+    #build: ./azure-vote
+    image: acrinfk8ssnplg.azurecr.io/sample-app-steiner:latest
     container_name: azure-vote-front
     environment:
       REDIS: azure-vote-back
