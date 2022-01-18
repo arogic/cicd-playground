@@ -23,6 +23,16 @@ spec:
         ports:
         - containerPort: 6379
           name: redis
+        readinessProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 15
+          periodSeconds: 20
         resources:
           requests:
             cpu: 250m
@@ -67,6 +77,16 @@ spec:
         image: acrinfk8ssnplg.azurecr.io/sample-app-steiner
         ports:
         - containerPort: 80
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
         resources:
           requests:
             cpu: 250m
