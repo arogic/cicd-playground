@@ -23,6 +23,11 @@ env:
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
+    env:
+      AZURE_CONTAINER_REGISTRY: acrinfk8ssnplg
+      PROJECT_NAME: sample-app-steiner
+      RESOURCE_GROUP: rg-inf-k8s-sn-plg
+      CLUSTER_NAME: aks-inf-k8s-sn-plg
     permissions:
       contents: read
       packages: write
