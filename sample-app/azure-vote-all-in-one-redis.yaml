@@ -23,6 +23,10 @@ spec:
         ports:
         - containerPort: 6379
           name: redis
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
         readinessProbe:
           tcpSocket:
             port: 6379
@@ -77,6 +81,10 @@ spec:
         image: acrinfk8ssnplg.azurecr.io/sample-app-steiner
         ports:
         - containerPort: 80
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
         readinessProbe:
           tcpSocket:
             port: 80
