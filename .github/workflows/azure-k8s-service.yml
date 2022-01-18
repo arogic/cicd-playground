@@ -33,12 +33,12 @@
 name: 'Deploy to AKS'
 
 ##on: [push]
-#on:
-#  push:
-#    branches:
-#      - main
 on:
-  pull_request:
+  push:
+    branches:
+      - main
+#on:
+#  pull_request:
         
 
 jobs:
