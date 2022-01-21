@@ -87,6 +87,7 @@ jobs:
         with:
           image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           #args: --severity-threshold=high
+          args: --file=sample-app/azure-vote/Dockerfile
 
       - name: Upload Docker Snyk result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v1
