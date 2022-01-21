@@ -26,4 +26,8 @@ resource "azurerm_app_service" "bad_example" {
   location            = module.rg.location
   resource_group_name = module.rg.name
   app_service_plan_id = "1231313123131231"
+  https_only = true
+  site_config {
+    ftps_state = "FtpsOnly"
+  }
 }
