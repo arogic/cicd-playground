@@ -53,7 +53,7 @@ jobs:
           # or `main.tf` for a Terraform configuration file
           file: sample-app/azure-vote-all-in-one-redis.yaml
 
-      - name: Upload result to GitHub Code Scanning
+      - name: Upload TF Snyk result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: snyk.sarif
@@ -85,7 +85,12 @@ jobs:
           SNYK_TOKEN: ${{ secrets.JOVAN_SNYK_TOKEN }}
         with:
           image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          args: --severity-threshold=high
+          #args: --severity-threshold=high
+
+      - name: Upload Docker Snyk result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: snyk.sarif
 
       - name: Gets K8s context
         uses: azure/aks-set-context@v1
