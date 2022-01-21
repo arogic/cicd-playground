@@ -61,16 +61,19 @@ jobs:
     # by creating initial files, loading any remote state,
     # downloading modules, etc.
     - name: Terraform Init
+      id: init
       run: |
         ${{ github.workspace }}/.github/scripts/terraform-task.sh init
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
+      id: fmt
       run: |
         ${{ github.workspace }}/.github/scripts/terraform-task.sh fmt
 
     # Terraform validate
     - name: Terraform Validate
+      id: validate
       run: |
         ${{ github.workspace }}/.github/scripts/terraform-task.sh validate
 
