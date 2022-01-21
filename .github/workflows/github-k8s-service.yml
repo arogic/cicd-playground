@@ -80,6 +80,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Run Snyk to check Docker images for vulnerabilities
+        continue-on-error: true
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.JOVAN_SNYK_TOKEN }}
