@@ -37,26 +37,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
     
-      - name: Run Snyk to check configuration files for security issues
-        # Snyk can be used to break the build when it detects security issues.
-        # In this case we want to upload the issues to GitHub Code Scanning
-        continue-on-error: true
-        uses: snyk/actions/iac@14818c4695ecc4045f33c9cee9e795a788711ca4
-        env:
-          # In order to use the Snyk Action you will need to have a Snyk API token.
-          # More details in https://github.com/snyk/actions#getting-your-snyk-token
-          # or you can signup for free at https://snyk.io/login
-          SNYK_TOKEN: ${{ secrets.JOVAN_SNYK_TOKEN }}
-        with:
-          # Add the path to the configuration file that you would like to test.
-          # For example `deployment.yaml` for a Kubernetes deployment manifest
-          # or `main.tf` for a Terraform configuration file
-          file: sample-app/azure-vote-all-in-one-redis.yaml
-
-      - name: Upload TF Snyk result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: snyk.sarif
+#      - name: Run Snyk to check configuration files for security issues
+#        # Snyk can be used to break the build when it detects security issues.
+#        # In this case we want to upload the issues to GitHub Code Scanning
+#        continue-on-error: true
+#        uses: snyk/actions/iac@14818c4695ecc4045f33c9cee9e795a788711ca4
+#        env:
+#          # In order to use the Snyk Action you will need to have a Snyk API token.
+#          # More details in https://github.com/snyk/actions#getting-your-snyk-token
+#          # or you can signup for free at https://snyk.io/login
+#          SNYK_TOKEN: ${{ secrets.JOVAN_SNYK_TOKEN }}
+#        with:
+#          # Add the path to the configuration file that you would like to test.
+#          # For example `deployment.yaml` for a Kubernetes deployment manifest
+#          # or `main.tf` for a Terraform configuration file
+#          file: sample-app/azure-vote-all-in-one-redis.yaml
+#
+#      - name: Upload K8s Snyk result to GitHub Code Scanning
+#        uses: github/codeql-action/upload-sarif@v1
+#        with:
+#          sarif_file: snyk.sarif
 
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
