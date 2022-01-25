@@ -99,7 +99,7 @@ jobs:
       id: login
 
     - name: Configure deployment
-      uses: azure/k8s-bake@v1
+      uses: azure/k8s-bake@v2.1
       with:
         renderEngine: 'kustomize'
         kustomizationPath: './kustomize/overlays/dev'
