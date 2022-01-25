@@ -102,7 +102,7 @@ jobs:
       uses: azure/k8s-bake@v1
       with:
         renderEngine: 'kustomize'
-        dockerComposeFile: './kustomize/overlays/dev'
+        kustomizationPath: './kustomize/overlays/dev'
         kubectl-version: 'latest'
       id: bake
 
