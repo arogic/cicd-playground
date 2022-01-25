@@ -82,7 +82,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - name: external port
+  - name: externalport
     port: 8080
     targetPort: 80
   selector:
