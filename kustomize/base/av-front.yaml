@@ -11,7 +11,7 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-  minReadySeconds: 6 
+  minReadySeconds: 5 
   template:
     metadata:
       labels:
@@ -33,3 +33,18 @@ spec:
         env:
         - name: REDIS
           value: "azure-vote-back"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-vote-front
+spec:
+  type: LoadBalancer
+  ports:
+  - name: externalport
+    port: 8080
+    targetPort: 80
+  selector:
+    app: azure-vote-front
