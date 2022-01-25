@@ -63,7 +63,8 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: azure-vote-front
-        image: ghcr.io/arogic/cicd-playground
+#        image: ghcr.io/arogic/cicd-playground
+        image: acrinfk8ssnplg.azurecr.io/sample-app-steiner
         ports:
         - containerPort: 80
         resources:
