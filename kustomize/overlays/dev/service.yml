@@ -1,0 +1,10 @@
+piVersion: v1
+kind: Service
+metadata:
+  name: azure-vote-front
+spec:
+  type: LoadBalancer
+  ports:
+  - name: externalport
+    port: 8081
+    targetPort: 80
