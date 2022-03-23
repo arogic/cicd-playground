@@ -80,7 +80,7 @@ jobs:
 
     # tfsec version ?
     - name: Run tfsec check pr commenter
-      uses: aquasecurity/tfsec-pr-commenter-action@v0.1.9
+      uses: aquasecurity/tfsec-pr-commenter-action@main
       with:
         tfsec_version: ${{ env.TFSEC_VERSION }}
         github_token: ${{ github.token }}
