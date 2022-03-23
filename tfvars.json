@@ -3,6 +3,6 @@
   "location": "westeurope",
   "tags": {
     "owner": "john.doe@example.com",
-    "environment": "development"
+    "environment": "playground"
   }
 }
