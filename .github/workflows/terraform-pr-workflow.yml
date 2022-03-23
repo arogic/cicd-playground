@@ -16,6 +16,7 @@ env:
   BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
   BACKEND_TF_STATE_FILE_NAME: test/inf.tfstate
   TERRAFORM_VERSION: 1.1.2
+  TFSEC_VERSION: v0.63.1
   # TFSCAN_VERSION: ??
 
 jobs:
@@ -81,6 +82,7 @@ jobs:
     - name: Run tfsec check pr commenter
       uses: aquasecurity/tfsec-pr-commenter-action@v0.1.9
       with:
+        tfsec_version: ${{ env.TFSEC_VERSION }}
         github_token: ${{ github.token }}
 
     # tfsec version ?
