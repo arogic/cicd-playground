@@ -91,18 +91,18 @@ jobs:
       with:
         sarif_file: tfsec.sarif
 
-    # tfsec version ?
-    - name: Upload SARIF report
-      if: ${{ !env.ACT }}
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: tfsec.sarif
+ #   # tfsec version ?
+ #   - name: Upload SARIF report
+ #     if: ${{ !env.ACT }}
+ #     uses: github/codeql-action/upload-sarif@v1
+ #     with:
+ #       sarif_file: tfsec.sarif
 
-    # tfsec version ?
-    - name: Run tfsec in dedicated docker container
-      uses: docker://aquasec/tfsec-ci
-      with:
-        args: tfsec
+#    # tfsec version ?
+#    - name: Run tfsec in dedicated docker container
+#      uses: docker://aquasec/tfsec-ci:v.1.13.0
+#      with:
+#        args: tfsec
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
