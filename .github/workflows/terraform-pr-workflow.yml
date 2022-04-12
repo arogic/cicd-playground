@@ -151,3 +151,4 @@ jobs:
           git push
         else
           echo "Working directory clean"
+        fi
