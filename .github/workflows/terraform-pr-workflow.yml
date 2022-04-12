@@ -145,6 +145,9 @@ jobs:
 
     - uses: fregante/setup-git-user@v1
     - run: |
-        git add results.json
-        git commit --message 'Something cool'
-    - run: git push
+        if [ "$(git status --untracked-files=no --porcelain)" ]; then 
+          git add manifests/*
+          git commit --message 'Update image tag'
+          git push
+        else
+          echo "Working directory clean"
