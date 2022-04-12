@@ -16,6 +16,7 @@ env:
   BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
   BACKEND_TF_STATE_FILE_NAME: test/inf.tfstate
   TERRAFORM_VERSION: 1.1.2
+  TFSEC_VERSION: v1.13.0
   # TFSCAN_VERSION: ??
 
 jobs:
@@ -27,6 +28,27 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v2
+
+    - name: Run Snyk to check Terraform configuration files for security issues
+      # Snyk can be used to break the build when it detects security issues.
+      # In this case we want to upload the issues to GitHub Code Scanning
+      continue-on-error: true
+      uses: snyk/actions/iac@14818c4695ecc4045f33c9cee9e795a788711ca4
+      env:
+        # In order to use the Snyk Action you will need to have a Snyk API token.
+        # More details in https://github.com/snyk/actions#getting-your-snyk-token
+        # or you can signup for free at https://snyk.io/login
+        SNYK_TOKEN: ${{ secrets.JOVAN_SNYK_TOKEN }}
+      with:
+        # Add the path to the configuration file that you would like to test.
+        # For example `deployment.yaml` for a Kubernetes deployment manifest
+        # or `main.tf` for a Terraform configuration file
+        file: main.tf
+
+    - name: Upload result to GitHub Code Scanning
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: snyk.sarif
 
     # Install the latest version of Terraform CLI and configure
     # the Terraform CLI configuration file with a Terraform Cloud user API token
@@ -40,16 +62,19 @@ jobs:
     # by creating initial files, loading any remote state,
     # downloading modules, etc.
     - name: Terraform Init
+      id: init
       run: |
         ${{ github.workspace }}/.github/scripts/terraform-task.sh init
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
+      id: fmt
       run: |
         ${{ github.workspace }}/.github/scripts/terraform-task.sh fmt
 
     # Terraform validate
     - name: Terraform Validate
+      id: validate
       run: |
         ${{ github.workspace }}/.github/scripts/terraform-task.sh validate
 
@@ -57,6 +82,7 @@ jobs:
     - name: Run tfsec check pr commenter
       uses: aquasecurity/tfsec-pr-commenter-action@main
       with:
+        tfsec_version: ${{ env.TFSEC_VERSION }}
         github_token: ${{ github.token }}
 
     # tfsec version ?
@@ -65,20 +91,64 @@ jobs:
       with:
         sarif_file: tfsec.sarif
 
-    # tfsec version ?
-    - name: Upload SARIF report
-      if: ${{ !env.ACT }}
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: tfsec.sarif
+ #   # tfsec version ?
+ #   - name: Upload SARIF report
+ #     if: ${{ !env.ACT }}
+ #     uses: github/codeql-action/upload-sarif@v1
+ #     with:
+ #       sarif_file: tfsec.sarif
 
-    # tfsec version ?
-    - name: Run tfsec in dedicated docker container
-      uses: docker://aquasec/tfsec-ci
-      with:
-        args: tfsec
+#    # tfsec version ?
+#    - name: Run tfsec in dedicated docker container
+#      uses: docker://aquasec/tfsec-ci:v.1.13.0
+#      with:
+#        args: tfsec
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
+      id: plan
       run: |
         ${{ github.workspace }}/.github/scripts/terraform-task.sh plan
+
+    - uses: actions/github-script@0.9.0
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Validation 🤖\`${{ steps.validate.outputs.stdout }}\`
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+          <details><summary>Show Plan</summary>
+
+          \`\`\`\n
+          ${process.env.PLAN}
+          \`\`\`
+
+          </details>
+
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
+
+    - name: Terraform Plan Status
+      if: steps.plan.outcome == 'failure'
+      run: exit 1
+
+    - uses: fregante/setup-git-user@v1
+    - run: |
+        if [ "$(git status --untracked-files=no --porcelain)" ]; then 
+          git add manifests/*
+          git commit --message 'Update image tag'
+          git push
+        else
+          echo "Working directory clean"
+        fi

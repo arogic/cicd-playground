@@ -15,11 +15,12 @@ function format() {
 }
 
 function validate() {
-  terraform validate
+  terraform validate -no-color
 }
 
 function plan() {
   terraform plan \
+  -no-color \
   -compact-warnings \
   -input=false \
   -var-file="./tfvars.json" \

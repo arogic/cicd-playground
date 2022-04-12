@@ -1,0 +1,128 @@
+# This workflow will build and push an application to a Azure Kubernetes Service (AKS) cluster when you push your code
+#
+# This workflow assumes you have already created the target AKS cluster and have created an Azure Container Registry (ACR)
+# For instructions see https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal
+# https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-portal
+# https://github.com/Azure/aks-create-action
+#
+# To configure this workflow:
+#
+# 1. Set the following secrets in your repository:
+#    - AZURE_CREDENTIALS (instructions for getting this https://github.com/Azure/login#configure-a-service-principal-with-a-secret)
+#
+# 2. Set the following environment variables (or replace the values below):
+#    - AZURE_CONTAINER_REGISTRY (name of your container registry)
+#    - PROJECT_NAME
+#    - RESOURCE_GROUP (where your cluster is deployed)
+#    - CLUSTER_NAME (name of your AKS cluster)
+#
+# 3. Choose the approrpiate render engine for the bake step https://github.com/Azure/k8s-bake. The config below assumes helm, then set
+#    any needed environment variables such as:
+#    - CHART_PATH 
+#    - CHART_OVERRIDE_PATH
+#
+# For more information on GitHub Actions for Azure, refer to https://github.com/Azure/Actions
+# For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
+# For more options with the actions used below please see the folllowing
+# https://github.com/Azure/login
+# https://github.com/Azure/aks-set-context
+# https://github.com/marketplace/actions/azure-cli-action
+# https://github.com/Azure/k8s-bake
+# https://github.com/Azure/k8s-deploy   
+
+name: 'Deploy to AKS'
+
+# This controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+        
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      AZURE_CONTAINER_REGISTRY: acrinfk8ssnplg
+      PROJECT_NAME: sample-app-steiner
+      RESOURCE_GROUP: rg-inf-k8s-sn-plg
+      CLUSTER_NAME: aks-inf-k8s-sn-plg
+      DOCKER_COMPOSE_PATH: sample-app/docker-compose.yml
+
+    steps:
+    - uses: actions/checkout@master
+    
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+    
+    - name: Build front image on ACR
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          az configure --defaults acr=${{ env.AZURE_CONTAINER_REGISTRY }}
+          cd $GITHUB_WORKSPACE/sample-app/azure-vote
+          az acr build -t ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.PROJECT_NAME }}:${{ github.sha }} -r ${{ env.AZURE_CONTAINER_REGISTRY }} .
+    
+    - name: Gets K8s context
+      uses: azure/aks-set-context@v1
+      with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          resource-group: ${{ env.RESOURCE_GROUP }}
+          cluster-name: ${{ env.CLUSTER_NAME }}
+      id: login
+
+    - name: Configure deployment
+      uses: azure/k8s-bake@v2.1
+      with:
+        renderEngine: 'kustomize'
+        kustomizationPath: './kustomize/overlays/dev'
+        kubectl-version: 'latest'
+      id: bake
+
+    - name: Validate created manifest
+      uses: Azure/k8s-lint@v1
+      with:
+        manifests: ${{ steps.bake.outputs.manifestsBundle }}
+
+    - name: Check baked file permissions
+      run: |
+        ls -la ${{ steps.bake.outputs.manifestsBundle }}
+
+#    - name: BAKED - Run Snyk to check configuration files for security issues
+#      # Snyk can be used to break the build when it detects security issues.
+#      # In this case we want to upload the issues to GitHub Code Scanning
+#      continue-on-error: true
+#      uses: snyk/actions/iac@14818c4695ecc4045f33c9cee9e795a788711ca4
+#      env:
+#        # In order to use the Snyk Action you will need to have a Snyk API token.
+#        # More details in https://github.com/snyk/actions#getting-your-snyk-token
+#        # or you can signup for free at https://snyk.io/login
+#        SNYK_TOKEN: ${{ secrets.JOVAN_SNYK_TOKEN }}
+#      with:
+#        # Add the path to the configuration file that you would like to test.
+#        # For example `deployment.yaml` for a Kubernetes deployment manifest
+#        # or `main.tf` for a Terraform configuration file
+#        file: ${{ steps.bake.outputs.manifestsBundle }}
+#    - name: Upload result to GitHub Code Scanning
+#      uses: github/codeql-action/upload-sarif@v1
+#      with:
+#        sarif_file: snyk.sarif
+
+
+    - name: Deploys application
+      uses: Azure/k8s-deploy@v1
+      with:
+        namespace: playground
+#        manifests: ${{ github.workspace }}/sample-app/azure-vote-all-in-one-redis.yaml
+        manifests: ${{ steps.bake.outputs.manifestsBundle }}
+        images: |
+          ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.PROJECT_NAME }}:${{ github.sha }}
+        imagepullsecrets: |
+          ${{ env.PROJECT_NAME }}
