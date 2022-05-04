@@ -6,6 +6,8 @@ on:
   #     - './'
   pull_request:
 
+concurrency: ${{ github.ref }}
+
 env:
   ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZ_SUBSCRIPTION_ID }}
@@ -49,7 +51,7 @@ jobs:
         ${{ github.workspace }}/.github/scripts/terraform-task.sh fmt
 
     # Terraform validate
-    - name: Terraform Validate
+    - name: Terraform Validate task
       run: |
         ${{ github.workspace }}/.github/scripts/terraform-task.sh validate
 
