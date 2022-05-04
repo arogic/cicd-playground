@@ -51,7 +51,7 @@ jobs:
         ${{ github.workspace }}/.github/scripts/terraform-task.sh fmt
 
     # Terraform validate
-    - name: Terraform Validate
+    - name: Terraform Validate task
       run: |
         ${{ github.workspace }}/.github/scripts/terraform-task.sh validate
 
