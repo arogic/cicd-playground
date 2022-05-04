@@ -6,6 +6,8 @@ on:
   #     - './'
   pull_request:
 
+concurrency: ${{ github.ref }
+
 env:
   ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZ_SUBSCRIPTION_ID }}
