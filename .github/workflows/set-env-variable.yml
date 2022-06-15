@@ -38,3 +38,8 @@ jobs:
           echo "${{ env.RESOURCE_GROUP }}"
           echo ${{ env.CLUSTER_NAME }}
           echo "${{ env.AZURE_CREDENTIALS }}" # This will output 'yellow'
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ env.AZURE_CREDENTIALS }}
