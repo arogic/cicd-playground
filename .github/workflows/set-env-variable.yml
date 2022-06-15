@@ -30,7 +30,7 @@ jobs:
         run: |
          echo "RESOURCE_GROUP=resource_group" >> $GITHUB_ENV
          echo "CLUSTER_NAME=cluster_name" >> $GITHUB_ENV
-         echo "AZURE_CREDENTIALS={\"clientId\": \"${{ env.ARM_CLIENT_ID }}\", "clientSecret": \"${{ env.ARM_CLIENT_SECRET }}\", \"subscriptionId\": \"${{ env.ARM_SUBSCRIPTION_ID }}\", \"tenantId\": \"${{ env.ARM_TENANT_ID }}\"}" >> $GITHUB_ENV 
+         echo "AZURE_CREDENTIALS={\"clientId\": \"${{ env.ARM_CLIENT_ID }}\", \"clientSecret\": \"${{ env.ARM_CLIENT_SECRET }}\", \"subscriptionId\": \"${{ env.ARM_SUBSCRIPTION_ID }}\", \"tenantId\": \"${{ env.ARM_TENANT_ID }}\"}" >> $GITHUB_ENV 
 
       - name: Use the value
         id: step_two
