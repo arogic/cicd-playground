@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test boolean true
-        if: ${{ inputs.DRY_RUN == 'true' }}
+        if: ${{ github.ref == 'refs/heads/main' && inputs.DRY_RUN == 'true' }}
         run: |
           echo true
       - name: test boolean false
-        if: ${{ inputs.DRY_RUN == 'false'}}
+        if: ${{ github.ref == 'refs/heads/main' && inputs.DRY_RUN == 'false'}}
         run: |
           echo false
