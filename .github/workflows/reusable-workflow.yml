@@ -21,4 +21,4 @@ jobs:
 #        if: ${{ inputs.DRY_RUN }}
 #        run: |
 #          echo false
-       - run: echo '${{ inputs.DRY_RUN }}'
+       - run: echo ${{ inputs.DRY_RUN }}
