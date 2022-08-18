@@ -6,7 +6,6 @@ on:
       DRY_RUN:
         required: true
         type: string
-        default: 'true'
 
 jobs:
   example_job:
@@ -14,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test boolean true
-        if: ${{ github.ref == 'refs/heads/develop' && inputs.DRY_RUN == 'true' }}
+        if: ${{ github.ref == 'refs/heads/main' && inputs.DRY_RUN == 'true' }}
         run: |
           echo true
       - name: test boolean false
-        if: ${{ github.ref == 'refs/heads/develop' && inputs.DRY_RUN == 'false'}}
+        if: ${{ github.ref == 'refs/heads/main' && inputs.DRY_RUN == 'false'}}
         run: |
           echo false
