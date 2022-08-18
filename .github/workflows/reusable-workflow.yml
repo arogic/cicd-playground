@@ -13,12 +13,11 @@ jobs:
     name: Pass input my-action
     runs-on: ubuntu-latest
     steps:
-#      - name: test boolean true
-#        if: ${{ inputs.DRY_RUN }}
-#        run: |
-#          echo true
-#      - name: test boolean false
-#        if: ${{ inputs.DRY_RUN }}
-#        run: |
-#          echo false
-       - run: echo ${{ inputs.DRY_RUN }}
+      - name: test boolean true
+        if: ${{ inputs.DRY_RUN }}
+        run: |
+          echo true
+      - name: test boolean false
+        if: ${{ inputs.DRY_RUN }}
+        run: |
+          echo false
