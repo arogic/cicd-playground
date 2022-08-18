@@ -10,6 +10,7 @@ on:
         description: Control if changes will be deployed to Prod env
         required: true
         type: boolean
+        default: true
 jobs:
   testjob:
     uses: ./.github/workflows/reusable-workflow.yml
