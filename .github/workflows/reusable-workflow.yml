@@ -5,8 +5,8 @@ on:
     inputs:
       DRY_RUN:
         required: true
-        type: boolean
-        default: true
+        type: string
+        default: 'true'
 
 jobs:
   example_job:
