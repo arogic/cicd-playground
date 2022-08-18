@@ -1,0 +1,17 @@
+# Define a name of the workflow
+name: Test boolean input
+
+# This controls when the action will run.
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: Control if changes will be deployed to Prod env
+        required: true
+        type: boolean
+jobs:
+  testjob:
+    uses: ./.github/workflows/reusable-workflow.yml
+    with:
+      DRY_RUN: ${{ github.event.inputs.dryRun }}
