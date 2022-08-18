@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       dryRun:
-        description: Control if changes will be deployed to Prod env
+        description: Dry Run? (uncheck to do an actual deploy)
         required: true
         type: boolean
         default: true
