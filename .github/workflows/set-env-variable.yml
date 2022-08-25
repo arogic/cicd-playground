@@ -15,6 +15,7 @@ on:
 
 jobs:
   argocd-deploy-apps-preproduction:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     environment: preproduction
     runs-on: ubuntu-latest
     env:
