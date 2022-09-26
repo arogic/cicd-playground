@@ -33,4 +33,6 @@ jobs:
           # VERSION: ${{ steps.calver.outputs.release }}.${{ env.github_run_number }}
           VERSION: ${{ steps.calver.outputs.release }}.${{ env.GITHUB_RUN_NUMBER }}
         run: |
+          env
+          echo "GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER} ${{ env.GITHUB_RUN_NUMBER }}"
           echo "VERSION:  ${VERSION}"
