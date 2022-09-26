@@ -30,7 +30,7 @@ jobs:
 
       - name: Deploy
         env:
-          VERSION: ${{ steps.calver.outputs.release }}.${{ env.github_run_number }}
-          # VERSION: ${{ steps.calver.outputs.release }}.${{ env.GITHUB_RUN_NUMBER }}
+          # VERSION: ${{ steps.calver.outputs.release }}.${{ env.github_run_number }}
+          VERSION: ${{ steps.calver.outputs.release }}.${{ env.GITHUB_RUN_NUMBER }}
         run: |
           echo "VERSION:  ${VERSION}"
