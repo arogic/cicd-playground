@@ -33,7 +33,7 @@ jobs:
       - name: Determine Image Tag Version
         id: image-tag-version
         run: |
-          if [ ${github.ref} == 'refs/heads/develop' ]
+          if [ ${github.ref} = "refs/heads/develop" ]
           then
             echo "::set-output name=version::${{ steps.calver.outputs.release }}-dev"
           else
