@@ -30,18 +30,33 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Determine Image Tag Version
+        id: image-tag-version
+        run: |
+          if [ ${github.ref} == 'refs/heads/develop' ]
+          then
+            echo "::set-output name=version::${{ steps.calver.outputs.release }}-dev"
+          else
+            echo "::set-output name=version::${{ steps.calver.outputs.release }}"
+          fi
+
+      - name: Debug
+        run: |
+          echo "Image Tag Version: ${{ steps.image-tag-version.outputs.version }}"
+
       - name: Deploy
         env:
           # VERSION: ${{ steps.calver.outputs.release }}.${{ env.github_run_number }}
           VERSION: "${{ steps.calver.outputs.release }}"
+          # VERSION: "${{ steps.calver.outputs.release }}"
         run: |
           echo "GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER}"
           echo "VERSION:  ${VERSION}"
-          
+
   test2:
     runs-on: ubuntu-latest
     needs: [test]
-    
+
     steps:
     - name: Deploy2
       run: |
