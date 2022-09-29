@@ -4,7 +4,8 @@ name: Test CalVer
 # This controls when the action will run.
 on:
   schedule:
-    - cron: '40 9 * * 1-5'
+    - cron: '*/5 * * * *'
+  # - cron: '40 9 * * 1-5'
   # push:
   #  branches:
   #    - main
@@ -36,6 +37,7 @@ jobs:
       - name: Determine Image Tag Version
         id: image-tag-version
         run: |
+          date
           env
           if [ ${GITHUB_REF} = "refs/heads/main" ]
           then
