@@ -3,9 +3,11 @@ name: Test CalVer
 
 # This controls when the action will run.
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '30 7 * * 1-5'
+  # push:
+  #  branches:
+  #    - main
 
   # Allows you to run this workflow manually from the Actions tab
   # workflow_dispatch:
