@@ -20,3 +20,5 @@ module "vnet" {
   location             = module.rg.location
   virtual_network_name = var.virtual_network_name
 }
+
+# Comment
