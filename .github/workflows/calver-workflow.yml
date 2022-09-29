@@ -4,7 +4,7 @@ name: Test CalVer
 # This controls when the action will run.
 on:
   schedule:
-    - cron: '30 7 * * 1-5'
+    - cron: '40 9 * * 1-5'
   # push:
   #  branches:
   #    - main
