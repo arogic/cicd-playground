@@ -15,4 +15,3 @@ gh pr create --title "updated readme" --body "Added github cli command to login"
 gh pr merge test-pr -m
 ```
 
-...
