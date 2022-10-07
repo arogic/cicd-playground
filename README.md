@@ -14,3 +14,5 @@ echo -n "GITHUB_PERSONAL_ACCESS_TOKEN" | gh auth login --with-token
 gh pr create --title "updated readme" --body "Added github cli command to login"
 gh pr merge test-pr -m
 ```
+
+...
