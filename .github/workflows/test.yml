@@ -35,15 +35,21 @@ jobs:
         echo "${{ github.workspace }}"
         ls -ltr ${{ github.workspace }}
 
-    - uses: ballistax/ansible-vault-action@master
+#    - uses: ballistax/ansible-vault-action@master
+#      with:
+#        vault_key: ${{ secrets.VAULT_KEY }}
+#        args: decrypt secret.json --output foo.json
+
+    - uses: anthonykgross/ansible-vault-cli-github-action@v1
       with:
         vault_key: ${{ secrets.VAULT_KEY }}
-        args: decrypt secret.json --output foo.json
+        command: "ansible-vault decrypt secret.json"
 
     - name: Show Content
       run: |
         ls -ltr
-        jq .credentials foo.json
+        jq .credentials secret.json
+        # jq .credentials foo.json
         # cat secret.json
 
     - name: Run script
