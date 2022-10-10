@@ -5,6 +5,7 @@ on:
     branches:
       - main
 
+  workflow_dispatch:
 # env:
 #   ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
 #   ARM_SUBSCRIPTION_ID: ${{ secrets.AZ_SUBSCRIPTION_ID }}
@@ -31,3 +32,12 @@ jobs:
         pwd
         ls -la
         gh --version
+
+    - name: Run script
+      env:
+        GIT_BRANCH: release/release-${{ github.run_id }}
+        GIT_BASE_BRANCH: main
+        GITHUB_ACTIONS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: "1.2"
+      run: |
+        ${{ github.workspace }}/.github/scripts/get-merge-commit.sh
