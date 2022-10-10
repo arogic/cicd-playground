@@ -43,6 +43,8 @@ jobs:
     - name: Show Content
       run: |
         ls -ltr
+        chmod 0644 secret.json
+        ls -ltr
         jq .credentials secret.json
         # cat secret.json
 
