@@ -14,5 +14,7 @@ ls -ltr ./git-commit.txt
 cat ./git-commit.txt
 PR_MERGE_COMMIT=$(cat ./git-commit.txt)
 echo "PR_MERGE_COMMIT: ${PR_MERGE_COMMIT}"
+echo "VERSION: ${VERSION}"
+git pull
 git tag -a ${VERSION} -m "${VERSION}" ${PR_MERGE_COMMIT}
 git push --tags
