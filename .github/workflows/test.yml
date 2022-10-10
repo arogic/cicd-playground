@@ -38,6 +38,6 @@ jobs:
         GIT_BRANCH: release/release-${{ github.run_id }}
         GIT_BASE_BRANCH: main
         GITHUB_ACTIONS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VERSION: "1.2"
+        VERSION: 1.2.${{ github.run_id }}
       run: |
         ${{ github.workspace }}/.github/scripts/get-merge-commit.sh
