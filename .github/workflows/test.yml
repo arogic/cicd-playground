@@ -33,6 +33,15 @@ jobs:
         ls -la
         gh --version
 
+    - uses: ballistax/ansible-vault-action@master
+      with:
+        vault_key: ${{ secrets.VAULT_KEY }}
+        args: decrypt ${{ github.workspace }}/secret.yml
+
+    - name: Show Content
+      run: |
+        cat ${{ github.workspace }}/secret.yml
+
     - name: Run script
       env:
         GIT_BRANCH: release/release-${{ github.run_id }}
