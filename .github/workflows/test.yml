@@ -48,6 +48,7 @@ jobs:
     - name: Show Content
       run: |
         ls -ltr
+        sudo chmod 0644 secret.json
         jq .credentials secret.json
         # jq .credentials foo.json
         # cat secret.json
