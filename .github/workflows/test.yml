@@ -38,14 +38,12 @@ jobs:
     - uses: ballistax/ansible-vault-action@master
       with:
         vault_key: ${{ secrets.VAULT_KEY }}
-        args: decrypt secret.json
+        args: decrypt secret.json --output foo.json
 
     - name: Show Content
       run: |
         ls -ltr
-        chmod 0644 secret.json
-        ls -ltr
-        jq .credentials secret.json
+        jq .credentials foo.json
         # cat secret.json
 
     - name: Run script
