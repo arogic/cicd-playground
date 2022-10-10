@@ -1,3 +1,5 @@
+git config --global user.email "a.rogic@gmail.com"
+git config --global user.name "a.rogic"
 GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr create --fill --base "${GIT_BASE_BRANCH}"
 GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr merge --rebase --auto
 GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr review --approve
