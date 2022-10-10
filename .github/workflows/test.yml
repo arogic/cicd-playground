@@ -32,15 +32,17 @@ jobs:
         pwd
         ls -la
         gh --version
+        echo "${{ github.workspace }}"
+        ls -ltr ${{ github.workspace }}
 
     - uses: ballistax/ansible-vault-action@master
       with:
         vault_key: ${{ secrets.VAULT_KEY }}
-        args: decrypt ${{ github.workspace }}/secret.yml
+        args: decrypt secret.yml
 
     - name: Show Content
       run: |
-        cat ${{ github.workspace }}/secret.yml
+        cat secret.yml
 
     - name: Run script
       env:
