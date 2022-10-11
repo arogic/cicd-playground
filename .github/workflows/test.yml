@@ -26,6 +26,8 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
     - name: Check if github cli is installed
       run: |
@@ -56,7 +58,7 @@ jobs:
         ls -ltr
         sudo chmod 0644 secret.json
         jq .credentials secret.json
-        echo "${{ steps.get-base-commit.outputs.base-commit }}"
+        echo "GitCommit: ${{ steps.get-base-commit.outputs.base-commit }}"
         # jq .credentials foo.json
         # cat secret.json
 
