@@ -2,7 +2,7 @@ git remote set-url origin https://x-access-token:${GITHUB_ACTIONS_TOKEN}@github.
 git config --global user.email "a.rogic@gmail.com"
 git config --global user.name "arogic"
 git checkout -b "${GIT_BRANCH}"
-echo "Test" >> test/README.md
+echo "Test 8" >> test/README.md
 git add test/*
 git commit -m "chore: updated test readme"
 git push --set-upstream origin "${GIT_BRANCH}"
