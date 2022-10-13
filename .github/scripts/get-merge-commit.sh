@@ -17,6 +17,7 @@ echo "PR_NUMBER: ${PR_NUMBER}"
 echo "Merging Pull Request"
 GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr merge --rebase --auto
 # GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr review --approve
+sleep 20
 GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr view "${GIT_BRANCH}" --json mergeCommit | jq -r .mergeCommit.oid > ./git-commit.txt
 ls -ltr ./git-commit.txt
 cat ./git-commit.txt
