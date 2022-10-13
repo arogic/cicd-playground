@@ -16,7 +16,7 @@ PR_NUMBER=$(cat ./output.txt | sed 's/[^0-9]*//g')
 echo "PR_NUMBER: ${PR_NUMBER}"
 echo "Merging Pull Request"
 GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr merge --rebase --auto
-# GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr review --approve
+GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr review --approve
 GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr view "${GIT_BRANCH}" --json mergeCommit | jq -r .mergeCommit.oid > ./git-commit.txt
 ls -ltr ./git-commit.txt
 cat ./git-commit.txt
