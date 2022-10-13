@@ -6,7 +6,8 @@ echo "Test" >> test/README.md
 git add test/*
 git commit -m "chore: updated test readme"
 git push --set-upstream origin "${GIT_BRANCH}"
-GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr create --fill --base "${GIT_BASE_BRANCH}"
+GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr create --fill --base "${GIT_BASE_BRANCH}" | tee -a ./output.txt
+cat ./output.txt
 GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr merge --rebase --auto
 GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr review --approve
 GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr view "${GIT_BRANCH}" --json mergeCommit | jq -r .mergeCommit.oid > ./git-commit.txt
