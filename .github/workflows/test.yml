@@ -37,30 +37,30 @@ jobs:
         echo "${{ github.workspace }}"
         ls -ltr ${{ github.workspace }}
 
-    - uses: ballistax/ansible-vault-action@master
-      with:
-        vault_key: ${{ secrets.VAULT_KEY }}
-        args: decrypt secret.json
-
-#    - uses: anthonykgross/ansible-vault-cli-github-action@v1
-#      with:
-#        vault_key: ${{ secrets.VAULT_KEY }}
-#        command: "ansible-vault decrypt secret.json"
-
-    - name: Get base commit hash
-      id: get-base-commit
-      run: |
-        BASE_COMMIT=$(git log --pretty=oneline --since="25 hours ago" | tail -1 | awk '{print $1}')
-        echo "::set-output name=base-commit::${BASE_COMMIT}"
-
-    - name: Show Content
-      run: |
-        ls -ltr
-        sudo chmod 0644 secret.json
-        jq .credentials secret.json
-        echo "GitCommit: ${{ steps.get-base-commit.outputs.base-commit }}"
-        # jq .credentials foo.json
-        # cat secret.json
+#     - uses: ballistax/ansible-vault-action@master
+#       with:
+#         vault_key: ${{ secrets.VAULT_KEY }}
+#         args: decrypt secret.json
+#
+# #    - uses: anthonykgross/ansible-vault-cli-github-action@v1
+# #      with:
+# #        vault_key: ${{ secrets.VAULT_KEY }}
+# #        command: "ansible-vault decrypt secret.json"
+#
+#     - name: Get base commit hash
+#       id: get-base-commit
+#       run: |
+#         BASE_COMMIT=$(git log --pretty=oneline --since="25 hours ago" | tail -1 | awk '{print $1}')
+#         echo "::set-output name=base-commit::${BASE_COMMIT}"
+#
+#     - name: Show Content
+#       run: |
+#         ls -ltr
+#         sudo chmod 0644 secret.json
+#         jq .credentials secret.json
+#         echo "GitCommit: ${{ steps.get-base-commit.outputs.base-commit }}"
+#         # jq .credentials foo.json
+#         # cat secret.json
 
     - name: Run script
       env:
