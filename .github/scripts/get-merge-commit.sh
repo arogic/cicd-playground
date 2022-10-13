@@ -2,7 +2,7 @@ git remote set-url origin https://x-access-token:${GITHUB_ACTIONS_TOKEN}@github.
 git config --global user.email "a.rogic@gmail.com"
 git config --global user.name "arogic"
 git checkout -b "${GIT_BRANCH}"
-echo "Test 8" >> test/README.md
+echo "Test 9" >> test/README.md
 git add test/*
 git commit -m "chore: updated test readme"
 git push --set-upstream origin "${GIT_BRANCH}"
@@ -26,6 +26,6 @@ echo "PR_MERGE_COMMIT: ${PR_MERGE_COMMIT}"
 echo "VERSION: ${VERSION}"
 echo "SHOW COMMIT SHA"
 GITHUB_TOKEN=$GITHUB_ACTIONS_TOKEN gh pr list -s closed -S "${PR_NUMBER}" --json mergeCommit | jq -r '.[0].mergeCommit.oid'
-git pull
+# git pull
 git tag -a ${VERSION} -m "${VERSION}" ${PR_MERGE_COMMIT}
 git push --tags
