@@ -39,5 +39,4 @@ jobs:
         sudo chmod 0644 secret.json
         jq .credentials secret.json
         echo "GitCommit: ${{ steps.get-base-commit.outputs.base-commit }}"
-        # jq .credentials foo.json
         # cat secret.json
