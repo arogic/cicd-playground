@@ -28,13 +28,24 @@ jobs:
         ls -ltr ${{ github.workspace }}
 
     # - uses: ballistax/ansible-vault-action@master
-    - uses: ballistax/ansible-vault-action@v1.0
+    - name: Decrypt Secrets
+      uses: ballistax/ansible-vault-action@v1.0
       with:
         vault_key: ${{ secrets.VAULT_KEY }}
         args: decrypt secret.json
 
-    - name: Show Content
+    - name: Show Decrypted Content
       run: |
-        ls -ltr
         sudo chmod 0644 secret.json
         jq .credentials secret.json
+
+    - name: Encrypt Secrets
+      uses: ballistax/ansible-vault-action@v1.0
+      with:
+        vault_key: ${{ secrets.VAULT_KEY }}
+        args: encrypt secret.json
+
+    - name: Show Encrypted Content
+      run: |
+        sudo chmod 0644 secret.json
+        cat secret.json
