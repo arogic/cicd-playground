@@ -1,4 +1,4 @@
-name: 'Test'
+name: 'Ansible-Vault'
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
         ls -ltr ${{ github.workspace }}
 
     # - uses: ballistax/ansible-vault-action@master
-    - uses: ballistax/ansible-vault-action@v1
+    - uses: ballistax/ansible-vault-action@v1.0
       with:
         vault_key: ${{ secrets.VAULT_KEY }}
         args: decrypt secret.json
@@ -38,6 +38,3 @@ jobs:
         ls -ltr
         sudo chmod 0644 secret.json
         jq .credentials secret.json
-        echo "GitCommit: ${{ steps.get-base-commit.outputs.base-commit }}"
-        # jq .credentials foo.json
-        # cat secret.json
