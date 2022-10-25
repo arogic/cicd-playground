@@ -1,0 +1,60 @@
+name: 'Terraform Plan'
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: 'Terraform-Plan'
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_vault_pass: ${{ secrets.VAULT_KEY }}
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    # Install the latest specific of Terraform CLI
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        terraform_version: 1.1.9
+
+    - name: Terraform Init
+      id: init
+      run: |
+        terraform init -input=false
+      working-directory: ansible-vault
+
+    - name: Terraform Validate
+      run: |
+        terraform validate -no-color
+      working-directory: ansible-vault
+
+    - name: Terraform Plan
+      id: init
+      run: |
+        terraform plan
+      working-directory: ansible-vault
+
+    # - name: Check if github cli is installed
+    #   run: |
+    #     pwd
+    #     ls -la
+    #     gh --version
+    #     echo "${{ github.workspace }}"
+    #     ls -ltr ${{ github.workspace }}
+
+    # - name: Encrypt Secret
+    #   uses: ballistax/ansible-vault-action@v1.0
+    #   with:
+    #     vault_key: ${{ secrets.VAULT_KEY }}
+    #     args: encrypt secret.json
