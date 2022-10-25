@@ -6,16 +6,6 @@ on:
       - main
 
   workflow_dispatch:
-# env:
-#   ARM_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
-#   ARM_SUBSCRIPTION_ID: ${{ secrets.AZ_SUBSCRIPTION_ID }}
-#   ARM_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
-#   ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
-#   BACKEND_RESOURCE_GROUP_NAME: ${{ secrets.BACKEND_RESOURCE_GROUP }}
-#   BACKEND_STORAGE_ACCOUNT_NAME: ${{ secrets.BACKEND_STORAGE_ACCOUNT_NAME }}
-#   BACKEND_CONTAINER_NAME: ${{ secrets.BACKEND_CONTAINER_NAME }}
-#   BACKEND_TF_STATE_FILE_NAME: test/inf.tfstate
-#   TERRAFORM_VERSION: 1.1.2
 
 jobs:
   test:
