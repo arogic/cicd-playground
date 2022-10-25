@@ -27,25 +27,46 @@ jobs:
         echo "${{ github.workspace }}"
         ls -ltr ${{ github.workspace }}
 
-    # - uses: ballistax/ansible-vault-action@master
-    - name: Decrypt Secrets
+    - name: Decrypt Secret
       uses: ballistax/ansible-vault-action@v1.0
       with:
         vault_key: ${{ secrets.VAULT_KEY }}
         args: decrypt secret.json
 
-    - name: Show Decrypted Content
+    - name: Show Decrypted Secret
       run: |
         sudo chmod 0644 secret.json
         jq .credentials secret.json
 
-    - name: Encrypt Secrets
+    - name: Decrypt Secrets
+      uses: ballistax/ansible-vault-action@v1.0
+      with:
+        vault_key: ${{ secrets.ANSIBLE_VAULT_SECRET }}
+        args: decrypt secrets.json
+
+    - name: Show Decrypted Secrets
+      run: |
+        sudo chmod 0644 secrets.json
+        jq .credentials secrets.json
+
+    - name: Encrypt Secret
       uses: ballistax/ansible-vault-action@v1.0
       with:
         vault_key: ${{ secrets.VAULT_KEY }}
         args: encrypt secret.json
 
-    - name: Show Encrypted Content
+    - name: Show Encrypted Secret
       run: |
         sudo chmod 0644 secret.json
         cat secret.json
+
+    - name: Encrypt Secrets
+      uses: ballistax/ansible-vault-action@v1.0
+      with:
+        vault_key: ${{ secrets.ANSIBLE_VAULT_SECRET }}
+        args: encrypt secrets.json
+
+    - name: Show Encrypted Secrets
+      run: |
+        sudo chmod 0644 secrets.json
+        cat secrets.json
