@@ -37,7 +37,7 @@ jobs:
       run: |
         sudo chmod 0644 secret.json
         jq .credentials secret.json
-        echo "apikey=$(jq .production.api-key secret.json)" >> $GITHUB_ENV
+        echo "apikey=$(jq .production.apikey secret.json)" >> $GITHUB_ENV
 
     - name: Decrypt Secrets
       uses: ballistax/ansible-vault-action@v1.0
