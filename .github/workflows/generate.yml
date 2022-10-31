@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.WORKFLOW_TOKEN }}
 
       - name: Create Workflow
         run: |
@@ -26,6 +26,8 @@ jobs:
           cat ${{ github.workspace }}/.github/workflows/test-workflow.yml
 
       - name: commit
+        env:
+          github_token: ${{ secrets.WORKFLOW_TOKEN }}
         run: |
           git config --global user.email "a.rogi@gmail.com"
           git config --global user.name "arogic"
