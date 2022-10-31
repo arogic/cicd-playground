@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ github.token }}
 
       - name: Create Workflow
         run: |
@@ -22,3 +24,11 @@ jobs:
                   - run: echo \"Hello World\"
           """  > ${{ github.workspace }}/.github/workflows/test-workflow.yml
           cat ${{ github.workspace }}/.github/workflows/test-workflow.yml
+
+      - name: commit
+        run: |
+          git config --global user.email "a.rogi@gmail.com"
+          git config --global user.name "arogic"
+          git add ${{ github.workspace }}/.github/workflows/*
+          git commit -m "Updated Workflow"
+          git push
