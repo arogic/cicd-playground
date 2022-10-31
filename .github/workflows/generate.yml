@@ -1,0 +1,15 @@
+name: Generate Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create Workflow
+        run: |
+          echo "on:\n  workflow_dispatch:\n\njobs:\n  testwf:\n    run-on: ubuntu-latest" > ${{ github.workspace }}/.github/workflows/test-workflow.yml
+          cat ${{ github.workspace }}/.github/workflows/test-workflow.yml
