@@ -11,5 +11,14 @@ jobs:
 
       - name: Create Workflow
         run: |
-          echo "on:\n  workflow_dispatch:\n\njobs:\n  testwf:\n    run-on: ubuntu-latest" > ${{ github.workspace }}/.github/workflows/test-workflow.yml
+          echo """
+          on:
+            workflow_dispatch:
+
+            jobs:
+              testwf:
+                run-on: ubuntu-latest
+                steps:
+                  - run: echo \"Hello World\"
+          """  > ${{ github.workspace }}/.github/workflows/test-workflow.yml
           cat ${{ github.workspace }}/.github/workflows/test-workflow.yml
