@@ -17,7 +17,7 @@ jobs:
             workflow_dispatch:
           jobs:
             testwf:
-              run-on: ubuntu-latest
+              runs-on: ubuntu-latest
               steps:
                 - run: echo \"Hello World\"
           """  > ${{ github.workspace }}/.github/workflows/test-workflow.yml
