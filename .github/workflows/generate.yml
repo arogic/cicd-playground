@@ -13,15 +13,13 @@ jobs:
 
       - name: Create Workflow
         run: |
-          echo """
-          on:
+          echo """on:
             workflow_dispatch:
-
-            jobs:
-              testwf:
-                run-on: ubuntu-latest
-                steps:
-                  - run: echo \"Hello World\"
+          jobs:
+            testwf:
+              run-on: ubuntu-latest
+              steps:
+                - run: echo \"Hello World\"
           """  > ${{ github.workspace }}/.github/workflows/test-workflow.yml
           cat ${{ github.workspace }}/.github/workflows/test-workflow.yml
 
@@ -29,8 +27,14 @@ jobs:
         # env:
         #  github_token: ${{ secrets.WORKFLOW_TOKEN }}
         run: |
-          git config --global user.email "a.rogi@gmail.com"
-          git config --global user.name "arogic"
-          git add ${{ github.workspace }}/.github/workflows/*
-          git commit -m "Updated Workflow"
-          git push
+          git diff --quiet ${{ github.workspace }}/.github/workflows/test-workflow.yml
+          if [ $? -eq 0 ]
+          then
+            echo "No changes"
+          else
+            git config --global user.email "a.rogi@gmail.com"
+            git config --global user.name "arogic"
+            git add ${{ github.workspace }}/.github/workflows/*
+            git commit -m "Updated Workflow"
+            git push
+          fi
